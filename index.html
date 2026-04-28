@@ -6,7 +6,7 @@
     <title>Religionsjakten 9 - Träna inför nationella provet i religion</title>
     <meta
       name="description"
-      content="En gamifierad lokal Python-app i en HTML-fil för att träna religion i årskurs 9: världsreligioner, etik, sekularisering, källkritik och resonemang."
+      content="En gamifierad lokal app i en HTML-fil för att träna religion i årskurs 9: världsreligioner, etik, sekularisering, källkritik och resonemang. Körs direkt i webbläsaren utan installation."
     />
     <meta property="og:title" content="Religionsjakten 9" />
     <meta
@@ -19,8 +19,6 @@
       href="https://api.fontshare.com/v2/css?f[]=chillax@500,600,700&f[]=general-sans@400,500,600,700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
-    <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
     <style>
       *,
       *::before,
@@ -897,7 +895,7 @@
           </div>
 
           <article class="question-card" id="question-card" aria-live="polite">
-            <p class="question-text" id="question-text">Python laddar frågebanken...</p>
+            <p class="question-text" id="question-text">Laddar frågebanken...</p>
             <div class="answers" id="answers"></div>
             <div class="feedback" id="feedback">
               <strong id="feedback-title"></strong>
@@ -944,8 +942,8 @@
 
           <section class="panel">
             <div class="panel-section">
-              <h2>Pythonstatus</h2>
-              <div class="py-status" id="py-status">Väntar på PyScript. Om du öppnar filen utan internet kan CDN-biblioteket saknas.</div>
+              <h2>Appstatus</h2>
+              <div class="py-status" id="py-status">Initierar quizmotorn...</div>
             </div>
           </section>
         </aside>
@@ -979,437 +977,533 @@
       })();
     </script>
 
-    <script type="py">
-from js import document, setTimeout
-from pyodide.ffi import create_proxy
-import random
-import math
+    <script>
+/* Religionsjakten 9 — quizmotor i vanlig JavaScript.
+   Tidigare prototyp använde PyScript/Pyodide men det misslyckades ofta att
+   starta på iOS Safari (lång nedladdning, minne, blockerade workers).
+   Logiken nedan är 1:1 med Python-versionen och körs direkt i webbläsaren. */
+(function () {
+  'use strict';
 
-MODES = {
-    "religioner": "Världsreligioner",
-    "etik": "Etik och livsfrågor",
-    "samhalle": "Religion och samhälle",
-    "mix": "Prov-sprint"
-}
+  const MODES = {
+    religioner: 'Världsreligioner',
+    etik: 'Etik och livsfrågor',
+    samhalle: 'Religion och samhälle',
+    mix: 'Prov-sprint'
+  };
 
-QUESTIONS = [
+  const QUESTIONS = [
     {
-        "mode": "religioner",
-        "q": "Vilket begrepp beskriver tron på en enda gud?",
-        "options": ["Polyteism", "Monoteism", "Ateism", "Animism"],
-        "answer": 1,
-        "why": "Monoteism betyder tro på en gud. Judendom, kristendom och islam räknas ofta som monoteistiska religioner.",
-        "key": "Använd begreppet och ge gärna exempel. Jämför med polyteism, som betyder tro på flera gudar."
+      mode: 'religioner',
+      q: 'Vilket begrepp beskriver tron på en enda gud?',
+      options: ['Polyteism', 'Monoteism', 'Ateism', 'Animism'],
+      answer: 1,
+      why: 'Monoteism betyder tro på en gud. Judendom, kristendom och islam räknas ofta som monoteistiska religioner.',
+      key: 'Använd begreppet och ge gärna exempel. Jämför med polyteism, som betyder tro på flera gudar.'
     },
     {
-        "mode": "religioner",
-        "q": "Vilken av följande högtider hör tydligast ihop med judendomens befrielseberättelse från Egypten?",
-        "options": ["Pesach", "Diwali", "Vesak", "Ramadan"],
-        "answer": 0,
-        "why": "Pesach firas till minne av israeliternas uttåg ur Egypten och är central i judisk tradition.",
-        "key": "Koppla högtiden till berättelsen, ritualer och identitet."
+      mode: 'religioner',
+      q: 'Vilken av följande högtider hör tydligast ihop med judendomens befrielseberättelse från Egypten?',
+      options: ['Pesach', 'Diwali', 'Vesak', 'Ramadan'],
+      answer: 0,
+      why: 'Pesach firas till minne av israeliternas uttåg ur Egypten och är central i judisk tradition.',
+      key: 'Koppla högtiden till berättelsen, ritualer och identitet.'
     },
     {
-        "mode": "religioner",
-        "q": "Vad är karma i hinduism och buddhism främst kopplat till?",
-        "options": ["En helig byggnad", "Handlingar och deras följder", "En profet", "Ett matförbud"],
-        "answer": 1,
-        "why": "Karma handlar om hur handlingar får konsekvenser, ofta kopplat till återfödelse och moralisk utveckling.",
-        "key": "För högre kvalitet: visa likhet och skillnad mellan hinduismens och buddhismens syn på återfödelse."
+      mode: 'religioner',
+      q: 'Vad är karma i hinduism och buddhism främst kopplat till?',
+      options: ['En helig byggnad', 'Handlingar och deras följder', 'En profet', 'Ett matförbud'],
+      answer: 1,
+      why: 'Karma handlar om hur handlingar får konsekvenser, ofta kopplat till återfödelse och moralisk utveckling.',
+      key: 'För högre kvalitet: visa likhet och skillnad mellan hinduismens och buddhismens syn på återfödelse.'
     },
     {
-        "mode": "religioner",
-        "q": "Vilken urkund är central inom islam?",
-        "options": ["Tripitaka", "Koranen", "Tanakh", "Nya testamentet"],
-        "answer": 1,
-        "why": "Koranen betraktas inom islam som Guds uppenbarelse till Muhammed.",
-        "key": "Förklara gärna att hadither också är viktiga, men att frågan gäller central urkund."
+      mode: 'religioner',
+      q: 'Vilken urkund är central inom islam?',
+      options: ['Tripitaka', 'Koranen', 'Tanakh', 'Nya testamentet'],
+      answer: 1,
+      why: 'Koranen betraktas inom islam som Guds uppenbarelse till Muhammed.',
+      key: 'Förklara gärna att hadither också är viktiga, men att frågan gäller central urkund.'
     },
     {
-        "mode": "religioner",
-        "q": "Vilket påstående stämmer bäst om de abrahamitiska religionerna?",
-        "options": [
-            "De saknar historiska rötter i Mellanöstern",
-            "De räknar Abraham som en viktig gestalt",
-            "De tror alltid på återfödelse",
-            "De har samma syn på Jesus"
-        ],
-        "answer": 1,
-        "why": "Judendom, kristendom och islam kallas abrahamitiska eftersom Abraham är en viktig gestalt i traditionerna.",
-        "key": "Ett starkt svar nämner både gemensamma rötter och viktiga skillnader."
+      mode: 'religioner',
+      q: 'Vilket påstående stämmer bäst om de abrahamitiska religionerna?',
+      options: [
+        'De saknar historiska rötter i Mellanöstern',
+        'De räknar Abraham som en viktig gestalt',
+        'De tror alltid på återfödelse',
+        'De har samma syn på Jesus'
+      ],
+      answer: 1,
+      why: 'Judendom, kristendom och islam kallas abrahamitiska eftersom Abraham är en viktig gestalt i traditionerna.',
+      key: 'Ett starkt svar nämner både gemensamma rötter och viktiga skillnader.'
     },
     {
-        "mode": "religioner",
-        "q": "Vad är nirvana inom buddhismen?",
-        "options": ["En gudomlig dom", "Ett tillstånd där lidande och begär upphör", "En synagoga", "En kristen bön"],
-        "answer": 1,
-        "why": "Nirvana beskriver befrielse från lidande, begär och återfödelsens kretslopp.",
-        "key": "Knyt gärna till de fyra ädla sanningarna och den åttafaldiga vägen."
+      mode: 'religioner',
+      q: 'Vad är nirvana inom buddhismen?',
+      options: ['En gudomlig dom', 'Ett tillstånd där lidande och begär upphör', 'En synagoga', 'En kristen bön'],
+      answer: 1,
+      why: 'Nirvana beskriver befrielse från lidande, begär och återfödelsens kretslopp.',
+      key: 'Knyt gärna till de fyra ädla sanningarna och den åttafaldiga vägen.'
     },
     {
-        "mode": "etik",
-        "q": "Vilken etisk modell bedömer främst om handlingens följder blir så goda som möjligt?",
-        "options": ["Pliktetik", "Konsekvensetik", "Dygdetik", "Religionsfrihet"],
-        "answer": 1,
-        "why": "Konsekvensetik fokuserar på resultatet av handlingen: vilka konsekvenser den får för olika personer.",
-        "key": "I ett provsvar: väg olika konsekvenser mot varandra och visa vem som påverkas."
+      mode: 'etik',
+      q: 'Vilken etisk modell bedömer främst om handlingens följder blir så goda som möjligt?',
+      options: ['Pliktetik', 'Konsekvensetik', 'Dygdetik', 'Religionsfrihet'],
+      answer: 1,
+      why: 'Konsekvensetik fokuserar på resultatet av handlingen: vilka konsekvenser den får för olika personer.',
+      key: 'I ett provsvar: väg olika konsekvenser mot varandra och visa vem som påverkas.'
     },
     {
-        "mode": "etik",
-        "q": "Vad kännetecknar pliktetik?",
-        "options": [
-            "Att regler och skyldigheter är centrala",
-            "Att bara känslor avgör",
-            "Att majoriteten alltid har rätt",
-            "Att religion inte får diskuteras"
-        ],
-        "answer": 0,
-        "why": "Pliktetik bedömer handlingar utifrån regler, rättigheter och skyldigheter, inte bara resultat.",
-        "key": "Visa kontrast mot konsekvensetik: en handling kan ses som fel även om den råkar ge bra följder."
+      mode: 'etik',
+      q: 'Vad kännetecknar pliktetik?',
+      options: [
+        'Att regler och skyldigheter är centrala',
+        'Att bara känslor avgör',
+        'Att majoriteten alltid har rätt',
+        'Att religion inte får diskuteras'
+      ],
+      answer: 0,
+      why: 'Pliktetik bedömer handlingar utifrån regler, rättigheter och skyldigheter, inte bara resultat.',
+      key: 'Visa kontrast mot konsekvensetik: en handling kan ses som fel även om den råkar ge bra följder.'
     },
     {
-        "mode": "etik",
-        "q": "En elev hittar svaren till ett prov på nätet. Vilken fråga passar bäst för dygdetik?",
-        "options": [
-            "Vilket straff får eleven?",
-            "Vilken typ av person blir jag om jag fuskar?",
-            "Hur många poäng tjänar eleven?",
-            "Vilken religion förbjuder internet?"
-        ],
-        "answer": 1,
-        "why": "Dygdetik handlar om egenskaper och karaktär: ärlighet, mod, ansvar och vilken människa man vill vara.",
-        "key": "Dygdetik blir starkare när du nämner konkreta dygder och hur de påverkar handlingen."
+      mode: 'etik',
+      q: 'En elev hittar svaren till ett prov på nätet. Vilken fråga passar bäst för dygdetik?',
+      options: [
+        'Vilket straff får eleven?',
+        'Vilken typ av person blir jag om jag fuskar?',
+        'Hur många poäng tjänar eleven?',
+        'Vilken religion förbjuder internet?'
+      ],
+      answer: 1,
+      why: 'Dygdetik handlar om egenskaper och karaktär: ärlighet, mod, ansvar och vilken människa man vill vara.',
+      key: 'Dygdetik blir starkare när du nämner konkreta dygder och hur de påverkar handlingen.'
     },
     {
-        "mode": "etik",
-        "q": "Vad betyder 'livsfråga' i religionskunskap?",
-        "options": [
-            "En fråga som bara har ett facit",
-            "En fråga om mening, identitet, död, ansvar eller hur man bör leva",
-            "En fråga som bara präster får svara på",
-            "En fråga om matlagning"
-        ],
-        "answer": 1,
-        "why": "Livsfrågor handlar om existentiella och etiska frågor som människor kan besvara på olika sätt.",
-        "key": "Jämför gärna religiösa och sekulära svar på samma livsfråga."
+      mode: 'etik',
+      q: "Vad betyder 'livsfråga' i religionskunskap?",
+      options: [
+        'En fråga som bara har ett facit',
+        'En fråga om mening, identitet, död, ansvar eller hur man bör leva',
+        'En fråga som bara präster får svara på',
+        'En fråga om matlagning'
+      ],
+      answer: 1,
+      why: 'Livsfrågor handlar om existentiella och etiska frågor som människor kan besvara på olika sätt.',
+      key: 'Jämför gärna religiösa och sekulära svar på samma livsfråga.'
     },
     {
-        "mode": "etik",
-        "q": "Vilket exempel visar bäst ett etiskt dilemma?",
-        "options": [
-            "Att välja mellan två glassmaker",
-            "Att välja mellan att tala sanning och skydda en vän från skada",
-            "Att komma ihåg en religiös högtid",
-            "Att lära sig ett begrepp"
-        ],
-        "answer": 1,
-        "why": "Ett etiskt dilemma innebär att viktiga värden krockar, till exempel ärlighet och omsorg.",
-        "key": "Ett bra resonemang visar konflikten mellan värden och väger argument på båda sidor."
+      mode: 'etik',
+      q: 'Vilket exempel visar bäst ett etiskt dilemma?',
+      options: [
+        'Att välja mellan två glassmaker',
+        'Att välja mellan att tala sanning och skydda en vän från skada',
+        'Att komma ihåg en religiös högtid',
+        'Att lära sig ett begrepp'
+      ],
+      answer: 1,
+      why: 'Ett etiskt dilemma innebär att viktiga värden krockar, till exempel ärlighet och omsorg.',
+      key: 'Ett bra resonemang visar konflikten mellan värden och väger argument på båda sidor.'
     },
     {
-        "mode": "samhalle",
-        "q": "Vad menas med sekularisering i Sverige?",
-        "options": [
-            "Att religion blir den enda lagen",
-            "Att religionens roll i samhälle och vardag ofta minskar eller förändras",
-            "Att alla måste vara ateister",
-            "Att alla religioner förbjuds"
-        ],
-        "answer": 1,
-        "why": "Sekularisering handlar om att religionens samhälleliga roll minskar eller förändras, men religion kan fortfarande vara viktig för individer och grupper.",
-        "key": "Nyansera: Sverige kan vara sekulariserat på samhällsnivå samtidigt som människor är religiösa privat."
+      mode: 'samhalle',
+      q: 'Vad menas med sekularisering i Sverige?',
+      options: [
+        'Att religion blir den enda lagen',
+        'Att religionens roll i samhälle och vardag ofta minskar eller förändras',
+        'Att alla måste vara ateister',
+        'Att alla religioner förbjuds'
+      ],
+      answer: 1,
+      why: 'Sekularisering handlar om att religionens samhälleliga roll minskar eller förändras, men religion kan fortfarande vara viktig för individer och grupper.',
+      key: 'Nyansera: Sverige kan vara sekulariserat på samhällsnivå samtidigt som människor är religiösa privat.'
     },
     {
-        "mode": "samhalle",
-        "q": "Vilket påstående om religionsfrihet i Sverige är mest korrekt?",
-        "options": [
-            "Man får bara tro privat",
-            "Man har rätt att tro, byta religion, lämna religion och utöva religion inom lagens ramar",
-            "Religionsfrihet gäller bara majoritetsreligionen",
-            "Religionsfrihet betyder att kritik mot religion är förbjuden"
-        ],
-        "answer": 1,
-        "why": "Religionsfrihet omfattar både frihet till religion och frihet från religion, men den samspelar med andra lagar och rättigheter.",
-        "key": "Högre nivå: resonera om gränser när rättigheter krockar, till exempel säkerhet, diskriminering eller skolans regler."
+      mode: 'samhalle',
+      q: 'Vilket påstående om religionsfrihet i Sverige är mest korrekt?',
+      options: [
+        'Man får bara tro privat',
+        'Man har rätt att tro, byta religion, lämna religion och utöva religion inom lagens ramar',
+        'Religionsfrihet gäller bara majoritetsreligionen',
+        'Religionsfrihet betyder att kritik mot religion är förbjuden'
+      ],
+      answer: 1,
+      why: 'Religionsfrihet omfattar både frihet till religion och frihet från religion, men den samspelar med andra lagar och rättigheter.',
+      key: 'Högre nivå: resonera om gränser när rättigheter krockar, till exempel säkerhet, diskriminering eller skolans regler.'
     },
     {
-        "mode": "samhalle",
-        "q": "Varför är källkritik viktigt när man läser om religion på sociala medier?",
-        "options": [
-            "För att alla religiösa källor alltid ljuger",
-            "För att religion aldrig får kritiseras",
-            "För att förenklingar, stereotyper och starka åsikter kan spridas snabbt",
-            "För att bara gamla böcker kan vara sanna"
-        ],
-        "answer": 2,
-        "why": "Religion framställs ibland förenklat eller vinklat. Källkritik hjälper dig att bedöma avsändare, syfte, urval och trovärdighet.",
-        "key": "Använd begrepp som avsändare, syfte, tendens, beroende och aktualitet."
+      mode: 'samhalle',
+      q: 'Varför är källkritik viktigt när man läser om religion på sociala medier?',
+      options: [
+        'För att alla religiösa källor alltid ljuger',
+        'För att religion aldrig får kritiseras',
+        'För att förenklingar, stereotyper och starka åsikter kan spridas snabbt',
+        'För att bara gamla böcker kan vara sanna'
+      ],
+      answer: 2,
+      why: 'Religion framställs ibland förenklat eller vinklat. Källkritik hjälper dig att bedöma avsändare, syfte, urval och trovärdighet.',
+      key: 'Använd begrepp som avsändare, syfte, tendens, beroende och aktualitet.'
     },
     {
-        "mode": "samhalle",
-        "q": "Vad är en stereotyp bild av religion?",
-        "options": [
-            "En nyanserad beskrivning med flera perspektiv",
-            "En förenklad generalisering om en grupp",
-            "En historisk tidslinje",
-            "En religiös byggnad"
-        ],
-        "answer": 1,
-        "why": "En stereotyp är en förenklad och ofta generaliserande bild som missar variation inom grupper.",
-        "key": "Visa att religioner inte är enhetliga: människor tolkar och praktiserar på olika sätt."
+      mode: 'samhalle',
+      q: 'Vad är en stereotyp bild av religion?',
+      options: [
+        'En nyanserad beskrivning med flera perspektiv',
+        'En förenklad generalisering om en grupp',
+        'En historisk tidslinje',
+        'En religiös byggnad'
+      ],
+      answer: 1,
+      why: 'En stereotyp är en förenklad och ofta generaliserande bild som missar variation inom grupper.',
+      key: 'Visa att religioner inte är enhetliga: människor tolkar och praktiserar på olika sätt.'
     },
     {
-        "mode": "samhalle",
-        "q": "Vilket resonemang är mest nyanserat?",
-        "options": [
-            "Religion leder alltid till konflikt",
-            "Religion leder aldrig till konflikt",
-            "Religion kan bidra till både konflikt, fredsarbete, identitet och gemenskap beroende på sammanhang",
-            "Religion påverkar bara historien, aldrig nutiden"
-        ],
-        "answer": 2,
-        "why": "Ett nyanserat resonemang visar flera möjliga samband och undviker absoluta påståenden.",
-        "key": "För provnivå: använd 'å ena sidan/å andra sidan' och förklara vilka faktorer som påverkar."
+      mode: 'samhalle',
+      q: 'Vilket resonemang är mest nyanserat?',
+      options: [
+        'Religion leder alltid till konflikt',
+        'Religion leder aldrig till konflikt',
+        'Religion kan bidra till både konflikt, fredsarbete, identitet och gemenskap beroende på sammanhang',
+        'Religion påverkar bara historien, aldrig nutiden'
+      ],
+      answer: 2,
+      why: 'Ett nyanserat resonemang visar flera möjliga samband och undviker absoluta påståenden.',
+      key: "För provnivå: använd 'å ena sidan/å andra sidan' och förklara vilka faktorer som påverkar."
     }
-]
+  ];
 
-ESSAYS = [
-    "Förklara hur religion kan påverka både individ och samhälle. Ge minst två exempel.",
-    "Jämför hur två religioner kan svara på en livsfråga, till exempel meningen med livet eller vad som händer efter döden.",
-    "Resonera om ett etiskt dilemma med hjälp av minst två etiska modeller.",
-    "Förklara vad sekularisering kan innebära i Sverige och varför religion ändå kan vara viktig.",
-    "Välj en religiös tradition och visa hur ritualer kan skapa identitet och gemenskap."
-]
+  const ESSAYS = [
+    'Förklara hur religion kan påverka både individ och samhälle. Ge minst två exempel.',
+    'Jämför hur två religioner kan svara på en livsfråga, till exempel meningen med livet eller vad som händer efter döden.',
+    'Resonera om ett etiskt dilemma med hjälp av minst två etiska modeller.',
+    'Förklara vad sekularisering kan innebära i Sverige och varför religion ändå kan vara viktig.',
+    'Välj en religiös tradition och visa hur ritualer kan skapa identitet och gemenskap.'
+  ];
 
-BADGES = [
-    ("Startklar", "Svara på 1 fråga", lambda s: s["answered"] >= 1),
-    ("Streakbyggare", "Få 3 rätt i rad", lambda s: s["best_streak"] >= 3),
-    ("Begreppskoll", "Nå nivå 2", lambda s: s["level"] >= 2),
-    ("Provsprintare", "Svara på 10 frågor", lambda s: s["answered"] >= 10),
-    ("Analytiker", "Skriv och checka en mini-essä", lambda s: s["essay_checks"] >= 1),
-]
+  const BADGES = [
+    { title: 'Startklar', desc: 'Svara på 1 fråga', condition: (s) => s.answered >= 1 },
+    { title: 'Streakbyggare', desc: 'Få 3 rätt i rad', condition: (s) => s.bestStreak >= 3 },
+    { title: 'Begreppskoll', desc: 'Nå nivå 2', condition: (s) => s.level >= 2 },
+    { title: 'Provsprintare', desc: 'Svara på 10 frågor', condition: (s) => s.answered >= 10 },
+    { title: 'Analytiker', desc: 'Skriv och checka en mini-essä', condition: (s) => s.essayChecks >= 1 }
+  ];
 
-state = {
-    "mode": "religioner",
-    "current": None,
-    "answered": 0,
-    "correct": 0,
-    "streak": 0,
-    "best_streak": 0,
-    "xp": 0,
-    "level": 1,
-    "essay_checks": 0,
-    "seen": set(),
-    "locked": False
-}
+  const state = {
+    mode: 'religioner',
+    current: null,
+    answered: 0,
+    correct: 0,
+    streak: 0,
+    bestStreak: 0,
+    xp: 0,
+    level: 1,
+    essayChecks: 0,
+    seen: new Set(),
+    locked: false
+  };
 
-def el(id):
-    return document.getElementById(id)
+  const el = (id) => document.getElementById(id);
+  const setText = (id, value) => {
+    const node = el(id);
+    if (node) node.textContent = String(value);
+  };
 
-def set_text(id, value):
-    el(id).textContent = str(value)
+  function escapeHtml(s) {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
 
-def toast(message):
-    box = el("toast")
-    box.textContent = message
-    box.classList.add("show")
-    def hide():
-        box.classList.remove("show")
-    setTimeout(create_proxy(hide), 2600)
+  let toastTimer = null;
+  function toast(message) {
+    const box = el('toast');
+    if (!box) return;
+    box.textContent = message;
+    box.classList.add('show');
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => box.classList.remove('show'), 2600);
+  }
 
-def level_from_xp(xp):
-    return max(1, int(math.floor(xp / 120)) + 1)
+  const levelFromXp = (xp) => Math.max(1, Math.floor(xp / 120) + 1);
+  const nextLevelXp = (level) => level * 120;
 
-def next_level_xp(level):
-    return level * 120
+  function updateStats() {
+    state.level = levelFromXp(state.xp);
+    setText('level', state.level);
+    setText('xp', state.xp);
+    setText('score', state.correct);
+    setText('streak', state.streak);
+    setText('answered', state.answered);
+    const accuracy = state.answered === 0 ? 0 : Math.round((100 * state.correct) / state.answered);
+    setText('accuracy', accuracy + '%');
+    const threshold = nextLevelXp(state.level);
+    const previous = state.level > 1 ? nextLevelXp(state.level - 1) : 0;
+    const span = threshold - previous;
+    const progress = Math.min(100, Math.max(0, ((state.xp - previous) / span) * 100));
+    const meter = el('xp-meter');
+    if (meter) meter.style.width = progress + '%';
+    setText('xp-next', Math.max(0, threshold - state.xp));
+    renderBadges();
+    renderMissions();
+  }
 
-def update_stats():
-    state["level"] = level_from_xp(state["xp"])
-    set_text("level", state["level"])
-    set_text("xp", state["xp"])
-    set_text("score", state["correct"])
-    set_text("streak", state["streak"])
-    set_text("answered", state["answered"])
-    accuracy = 0 if state["answered"] == 0 else round(100 * state["correct"] / state["answered"])
-    set_text("accuracy", f"{accuracy}%")
-    threshold = next_level_xp(state["level"])
-    previous = next_level_xp(state["level"] - 1) if state["level"] > 1 else 0
-    span = threshold - previous
-    progress = min(100, max(0, ((state["xp"] - previous) / span) * 100))
-    el("xp-meter").style.width = f"{progress}%"
-    set_text("xp-next", max(0, threshold - state["xp"]))
-    render_badges()
-    render_missions()
+  function questionPool() {
+    if (state.mode === 'mix') return QUESTIONS;
+    return QUESTIONS.filter((q) => q.mode === state.mode);
+  }
 
-def question_pool():
-    if state["mode"] == "mix":
-        return QUESTIONS
-    return [q for q in QUESTIONS if q["mode"] == state["mode"]]
+  function pickQuestion() {
+    const pool = questionPool();
+    let available = pool.filter((q) => !state.seen.has(q.q));
+    if (available.length === 0) {
+      state.seen.clear();
+      available = pool;
+    }
+    const q = available[Math.floor(Math.random() * available.length)];
+    state.seen.add(q.q);
+    return q;
+  }
 
-def pick_question():
-    pool = question_pool()
-    available = [q for q in pool if q["q"] not in state["seen"]]
-    if not available:
-        state["seen"].clear()
-        available = pool
-    q = random.choice(available)
-    state["seen"].add(q["q"])
-    return q
+  function renderQuestion() {
+    state.current = pickQuestion();
+    state.locked = false;
+    const q = state.current;
+    const card = el('question-card');
+    if (card) {
+      card.classList.remove('is-changing');
+      void card.offsetWidth;
+      card.classList.add('is-changing');
+    }
+    setText('mode-label', MODES[state.mode]);
+    setText('quest-title', state.mode !== 'mix' ? 'Dagens expedition' : 'Prov-sprint');
+    setText('question-text', q.q);
+    const feedback = el('feedback');
+    if (feedback) feedback.classList.remove('show');
+    const nextBtn = el('next-question');
+    if (nextBtn) nextBtn.disabled = true;
+    const answers = el('answers');
+    if (!answers) return;
+    answers.innerHTML = '';
+    q.options.forEach((option, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'answer-btn';
+      btn.type = 'button';
+      btn.setAttribute('data-index', String(i));
+      btn.setAttribute('data-testid', 'answer-' + i);
+      btn.innerHTML =
+        '<span class="answer-letter">' +
+        String.fromCharCode(65 + i) +
+        '</span><span>' +
+        escapeHtml(option) +
+        '</span>';
+      btn.addEventListener('click', () => answer(i));
+      answers.appendChild(btn);
+    });
+  }
 
-def render_question():
-    state["current"] = pick_question()
-    state["locked"] = False
-    q = state["current"]
-    card = el("question-card")
-    card.classList.remove("is-changing")
-    void = card.offsetWidth
-    card.classList.add("is-changing")
-    set_text("mode-label", MODES[state["mode"]])
-    set_text("quest-title", "Dagens expedition" if state["mode"] != "mix" else "Prov-sprint")
-    set_text("question-text", q["q"])
-    el("feedback").classList.remove("show")
-    el("next-question").disabled = True
-    answers = el("answers")
-    answers.innerHTML = ""
-    for i, option in enumerate(q["options"]):
-        btn = document.createElement("button")
-        btn.className = "answer-btn"
-        btn.type = "button"
-        btn.setAttribute("data-index", str(i))
-        btn.setAttribute("data-testid", f"answer-{i}")
-        btn.innerHTML = f'<span class="answer-letter">{chr(65+i)}</span><span>{option}</span>'
-        btn.addEventListener("click", create_proxy(lambda event, idx=i: answer(idx)))
-        answers.appendChild(btn)
+  function answer(idx) {
+    if (state.locked) return;
+    state.locked = true;
+    const q = state.current;
+    const correct = idx === q.answer;
+    state.answered += 1;
+    const buttons = Array.from(el('answers').querySelectorAll('.answer-btn'));
+    buttons.forEach((btn, i) => {
+      btn.disabled = true;
+      if (i === q.answer) btn.classList.add('correct');
+      else if (i === idx) btn.classList.add('wrong');
+    });
+    let gained = 0;
+    if (correct) {
+      state.correct += 1;
+      state.streak += 1;
+      state.bestStreak = Math.max(state.bestStreak, state.streak);
+      gained = state.mode === 'mix' ? 18 : 14;
+      if (state.streak >= 3) gained += 6;
+      const oldLevel = state.level;
+      state.xp += gained;
+      setText('feedback-title', 'Rätt! +' + gained + ' XP');
+      setText('feedback-text', q.why);
+      const newLevel = levelFromXp(state.xp);
+      if (newLevel > oldLevel) {
+        toast('Nivå upp! Du är nu nivå ' + newLevel + '.');
+      } else if (state.streak === 3) {
+        toast('Streak x3: du börjar bygga provform.');
+      }
+    } else {
+      state.streak = 0;
+      state.xp += 3;
+      setText('feedback-title', 'Inte riktigt, men +3 XP för träning');
+      setText('feedback-text', q.why);
+    }
+    el('feedback').classList.add('show');
+    el('next-question').disabled = false;
+    updateStats();
+  }
 
-def answer(idx):
-    if state["locked"]:
-        return
-    state["locked"] = True
-    q = state["current"]
-    correct = idx == q["answer"]
-    state["answered"] += 1
-    buttons = list(el("answers").querySelectorAll(".answer-btn"))
-    for i, btn in enumerate(buttons):
-        btn.disabled = True
-        if i == q["answer"]:
-            btn.classList.add("correct")
-        elif i == idx:
-            btn.classList.add("wrong")
-    gained = 0
-    if correct:
-        state["correct"] += 1
-        state["streak"] += 1
-        state["best_streak"] = max(state["best_streak"], state["streak"])
-        gained = 18 if state["mode"] == "mix" else 14
-        if state["streak"] >= 3:
-            gained += 6
-        old_level = state["level"]
-        state["xp"] += gained
-        set_text("feedback-title", f"Rätt! +{gained} XP")
-        set_text("feedback-text", q["why"])
-        if level_from_xp(state["xp"]) > old_level:
-            toast(f"Nivå upp! Du är nu nivå {level_from_xp(state['xp'])}.")
-        elif state["streak"] == 3:
-            toast("Streak x3: du börjar bygga provform.")
-    else:
-        state["streak"] = 0
-        state["xp"] += 3
-        set_text("feedback-title", "Inte riktigt, men +3 XP för träning")
-        set_text("feedback-text", q["why"])
-    el("feedback").classList.add("show")
-    el("next-question").disabled = False
-    update_stats()
+  function showKey() {
+    if (state.current === null) return;
+    setText('feedback-title', 'Resonemangsnyckel');
+    setText('feedback-text', state.current.key);
+    el('feedback').classList.add('show');
+  }
 
-def show_key(event=None):
-    if state["current"] is None:
-        return
-    set_text("feedback-title", "Resonemangsnyckel")
-    set_text("feedback-text", state["current"]["key"])
-    el("feedback").classList.add("show")
+  function setMode(mode) {
+    state.mode = mode;
+    el('mode-grid').querySelectorAll('.mode-card').forEach((btn) => {
+      btn.setAttribute('aria-pressed', btn.getAttribute('data-mode') === mode ? 'true' : 'false');
+    });
+    renderQuestion();
+    toast('Uppdrag valt: ' + MODES[mode]);
+  }
 
-def set_mode(mode):
-    state["mode"] = mode
-    for btn in el("mode-grid").querySelectorAll(".mode-card"):
-        btn.setAttribute("aria-pressed", "true" if btn.getAttribute("data-mode") == mode else "false")
-    render_question()
-    toast(f"Uppdrag valt: {MODES[mode]}")
+  function renderBadges() {
+    const box = el('badges');
+    if (!box) return;
+    box.innerHTML = '';
+    BADGES.forEach(({ title, desc, condition }) => {
+      const unlocked = condition(state);
+      const item = document.createElement('div');
+      item.className = unlocked ? 'badge-item' : 'badge-item locked';
+      item.innerHTML =
+        '<span class="badge-icon">' +
+        (unlocked ? '✓' : '·') +
+        '</span><span><strong>' +
+        escapeHtml(title) +
+        '</strong><br><span class="tiny muted">' +
+        escapeHtml(desc) +
+        '</span></span>';
+      box.appendChild(item);
+    });
+  }
 
-def render_badges():
-    box = el("badges")
-    box.innerHTML = ""
-    for title, desc, condition in BADGES:
-        unlocked = condition(state)
-        item = document.createElement("div")
-        item.className = "badge-item" if unlocked else "badge-item locked"
-        item.innerHTML = f'<span class="badge-icon">{"✓" if unlocked else "·"}</span><span><strong>{title}</strong><br><span class="tiny muted">{desc}</span></span>'
-        box.appendChild(item)
+  function renderMissions() {
+    const missions = [
+      { text: 'Svara på fem frågor', done: state.answered >= 5 },
+      { text: 'Få tre rätt i rad', done: state.bestStreak >= 3 },
+      { text: 'Checka en mini-essä', done: state.essayChecks >= 1 }
+    ];
+    const box = el('missions');
+    if (!box) return;
+    box.innerHTML = '';
+    missions.forEach(({ text, done }) => {
+      const item = document.createElement('label');
+      item.className = 'mission-item';
+      item.innerHTML =
+        '<input type="checkbox" ' +
+        (done ? 'checked' : '') +
+        ' disabled aria-label="' +
+        escapeHtml(text) +
+        '"><span><strong>' +
+        escapeHtml(text) +
+        '</strong><br><span class="tiny muted">' +
+        (done ? 'Avklarad' : 'Pågår') +
+        '</span></span>';
+      box.appendChild(item);
+    });
+  }
 
-def render_missions():
-    missions = [
-        ("Svara på fem frågor", state["answered"] >= 5),
-        ("Få tre rätt i rad", state["best_streak"] >= 3),
-        ("Checka en mini-essä", state["essay_checks"] >= 1)
-    ]
-    box = el("missions")
-    box.innerHTML = ""
-    for text, done in missions:
-        item = document.createElement("label")
-        item.className = "mission-item"
-        item.innerHTML = f'<input type="checkbox" {"checked" if done else ""} disabled aria-label="{text}"><span><strong>{text}</strong><br><span class="tiny muted">{"Avklarad" if done else "Pågår"}</span></span>'
-        box.appendChild(item)
+  function essayCheck() {
+    const text = (el('essay-answer').value || '').trim().toLowerCase();
+    const words = text.length === 0 ? [] : text.split(/\s+/);
+    const checks = [];
+    if (words.length >= 55) {
+      checks.push('Du har tillräcklig längd för ett utvecklat resonemang.');
+    } else {
+      checks.push('Utveckla svaret: sikta på minst 55 ord.');
+    }
+    const has = (arr) => arr.some((w) => text.indexOf(w) !== -1);
+    if (has(['exempel', 'till exempel', 'exempelvis'])) {
+      checks.push('Du använder exempel, vilket stärker svaret.');
+    } else {
+      checks.push('Lägg till minst ett konkret exempel.');
+    }
+    if (has(['därför', 'eftersom', 'leder till', 'påverkar', 'konsekvens'])) {
+      checks.push('Du förklarar samband, inte bara påstår.');
+    } else {
+      checks.push('Förklara orsak och konsekvens med ord som eftersom eller leder till.');
+    }
+    if (has(['å ena sidan', 'å andra sidan', 'samtidigt', 'dock', 'men'])) {
+      checks.push('Du nyanserar med flera perspektiv.');
+    } else {
+      checks.push('Nyansera: visa minst två sidor eller perspektiv.');
+    }
+    if (
+      has([
+        'religion',
+        'etik',
+        'sekularisering',
+        'ritual',
+        'identitet',
+        'livsfråga',
+        'pliktetik',
+        'konsekvensetik',
+        'dygdetik'
+      ])
+    ) {
+      checks.push('Du använder ämnesbegrepp.');
+    } else {
+      checks.push('Använd minst ett religionskunskapsbegrepp.');
+    }
+    const box = el('essay-feedback');
+    box.innerHTML = '';
+    checks.forEach((c) => {
+      const li = document.createElement('li');
+      li.textContent = c;
+      box.appendChild(li);
+    });
+    state.essayChecks += 1;
+    if (state.essayChecks === 1) {
+      state.xp += 20;
+      toast('Mini-essä checkad: +20 XP.');
+    }
+    if (Math.random() < 0.45) {
+      setText('essay-prompt', ESSAYS[Math.floor(Math.random() * ESSAYS.length)]);
+    }
+    updateStats();
+  }
 
-def essay_check(event=None):
-    text = el("essay-answer").value.strip().lower()
-    checks = []
-    if len(text.split()) >= 55:
-        checks.append("Du har tillräcklig längd för ett utvecklat resonemang.")
-    else:
-        checks.append("Utveckla svaret: sikta på minst 55 ord.")
-    if any(w in text for w in ["exempel", "till exempel", "exempelvis"]):
-        checks.append("Du använder exempel, vilket stärker svaret.")
-    else:
-        checks.append("Lägg till minst ett konkret exempel.")
-    if any(w in text for w in ["därför", "eftersom", "leder till", "påverkar", "konsekvens"]):
-        checks.append("Du förklarar samband, inte bara påstår.")
-    else:
-        checks.append("Förklara orsak och konsekvens med ord som eftersom eller leder till.")
-    if any(w in text for w in ["å ena sidan", "å andra sidan", "samtidigt", "dock", "men"]):
-        checks.append("Du nyanserar med flera perspektiv.")
-    else:
-        checks.append("Nyansera: visa minst två sidor eller perspektiv.")
-    if any(w in text for w in ["religion", "etik", "sekularisering", "ritual", "identitet", "livsfråga", "pliktetik", "konsekvensetik", "dygdetik"]):
-        checks.append("Du använder ämnesbegrepp.")
-    else:
-        checks.append("Använd minst ett religionskunskapsbegrepp.")
-    box = el("essay-feedback")
-    box.innerHTML = ""
-    for c in checks:
-        li = document.createElement("li")
-        li.textContent = c
-        box.appendChild(li)
-    state["essay_checks"] += 1
-    if state["essay_checks"] == 1:
-        state["xp"] += 20
-        toast("Mini-essä checkad: +20 XP.")
-    if random.random() < 0.45:
-        set_text("essay-prompt", random.choice(ESSAYS))
-    update_stats()
+  function bind() {
+    el('new-question').addEventListener('click', () => renderQuestion());
+    el('next-question').addEventListener('click', () => renderQuestion());
+    el('explain-more').addEventListener('click', showKey);
+    el('essay-check').addEventListener('click', essayCheck);
+    el('mode-grid').querySelectorAll('.mode-card').forEach((btn) => {
+      const mode = btn.getAttribute('data-mode');
+      btn.addEventListener('click', () => setMode(mode));
+    });
+  }
 
-def bind():
-    el("new-question").addEventListener("click", create_proxy(lambda event: render_question()))
-    el("next-question").addEventListener("click", create_proxy(lambda event: render_question()))
-    el("explain-more").addEventListener("click", create_proxy(show_key))
-    el("essay-check").addEventListener("click", create_proxy(essay_check))
-    for btn in el("mode-grid").querySelectorAll(".mode-card"):
-        mode = btn.getAttribute("data-mode")
-        btn.addEventListener("click", create_proxy(lambda event, m=mode: set_mode(m)))
+  function start() {
+    try {
+      bind();
+      renderBadges();
+      renderMissions();
+      renderQuestion();
+      updateStats();
+      setText('py-status', 'Quizmotorn är igång. Frågebanken körs lokalt i webbläsaren – inget skickas till någon server.');
+    } catch (err) {
+      const status = el('py-status');
+      if (status) {
+        status.textContent = 'Något gick fel vid start: ' + (err && err.message ? err.message : err) + '. Ladda om sidan.';
+      }
+      const qt = el('question-text');
+      if (qt) qt.textContent = 'Kunde inte ladda quizet. Ladda om sidan eller försök igen.';
+      // eslint-disable-next-line no-console
+      console.error(err);
+    }
+  }
 
-set_text("py-status", "Python är igång via PyScript. Frågebanken och spelmotorn körs i webbläsaren.")
-bind()
-render_badges()
-render_missions()
-render_question()
-update_stats()
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', start, { once: true });
+  } else {
+    start();
+  }
+})();
     </script>
   </body>
 </html>
