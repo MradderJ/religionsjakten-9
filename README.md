@@ -2,26 +2,24 @@
 
 En fristående gamifierad träningsapp för religionskunskap i årskurs 9.
 
-Appen är byggd som en enda statisk HTML-fil och körs **direkt i webbläsaren** med vanlig JavaScript. Den kräver ingen installation, ingen server och inget Python-runtime. Den fungerar lika bra på iPhone, iPad, Android och dator och kan hostas på GitHub Pages.
+## Två versioner
 
-## Innehåll
+- **`index.html` (snabbstart, standard på GitHub Pages):** En lättviktig mobilanpassad version utan **några** externa resurser. Inga typsnitt, ingen CDN, ingen PyScript/Pyodide. Använder systemets typsnitt och startar omedelbart även på iPhone över långsamma nät. Visar ett synligt statusmeddelande när quizmotorn är redo.
+- **`full.html` (full version):** Den ursprungliga, mer polerade versionen med Fontshare-typsnitt och utökad design. Länkad från snabbstartens sidfot.
+
+## Innehåll (båda versionerna)
 
 - Frågor om världsreligioner, etik, livsfrågor, sekularisering, religionsfrihet och källkritik.
 - Quizlägen: Världsreligioner, Etik och livsfrågor, Religion och samhälle, samt en blandad Prov-sprint.
-- XP, nivåer, streaks, märken och dagliga missions.
+- XP, nivåer, streaks, märken och dagliga uppdrag.
 - Mini-essä med checklista för att träna utvecklade resonemang.
-- Ljust och mörkt tema (växlas i toppmenyn).
 - Mobilanpassad layout.
 
 ## Integritet
 
-- Appen samlar **inte** in personuppgifter och kräver ingen inloggning.
-- All logik och spelstatus körs lokalt i din webbläsare. Inget skickas till någon server.
-- Sidan laddar typsnitt från ett externt CDN för bästa typografi, men typsnitten är inte nödvändiga – appen fungerar även om de blockeras.
-
-## Viktigt
-
-Detta är inte officiellt material från Skolverket och ska ses som ett fristående träningsstöd.
+- Inga personuppgifter, ingen inloggning, ingen serverkommunikation.
+- All spelstatus körs lokalt i din webbläsare.
+- Snabbversionen laddar **inga** externa resurser alls.
 
 ## Körning
 
@@ -29,4 +27,8 @@ Detta är inte officiellt material från Skolverket och ska ses som ett friståe
 
 ## Teknisk bakgrund
 
-En tidigare version använde PyScript/Pyodide för att köra Python i webbläsaren. Det startade dock inte tillförlitligt på iPhone (lång nedladdning, höga minneskrav, blockerade web workers över vissa nät). För att appen alltid ska starta är spelmotorn nu skriven i vanlig JavaScript med samma frågebank, samma poängsystem och samma UI som tidigare.
+En tidigare prototyp använde PyScript/Pyodide för att köra Python i webbläsaren. Det startade inte tillförlitligt på iPhone (lång nedladdning, höga minneskrav, blockerade web workers över vissa nät). Snabbstarten är därför skriven som ren vanilla JavaScript inline i HTML-filen — samma frågebank, samma poängsystem, samma kärnfunktioner.
+
+## Viktigt
+
+Detta är inte officiellt material från Skolverket och ska ses som ett fristående träningsstöd.
