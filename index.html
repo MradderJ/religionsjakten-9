@@ -4,22 +4,22 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#1f6f6b">
-<title>Religionsjakten 9 – Snabbstart</title>
-<meta name="description" content="Snabb mobilvänlig träningsapp för religionskunskap åk 9. Inga externa resurser. Startar direkt på iPhone.">
+<title>Religionsjakten 9 – 200 frågor</title>
+<meta name="description" content="200 frågor i religion för åk 9 / nationella provet. Mobilvänlig, inga externa resurser, körs direkt på iPhone.">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#f7f1df;--surface:#fffaf0;--surface2:#fcf4dc;--border:#d8c390;
   --text:#241d12;--muted:#665b42;--primary:#1f6f6b;--primary2:#164e4b;
   --good:#3f7f34;--goodbg:#d9ead1;--bad:#a43c55;--badbg:#efd3da;
-  --gold:#b87806;--goldbg:#f2dfb7;
+  --gold:#b87806;--goldbg:#f2dfb7;--accent:#7a3e9d;--accentbg:#ede0f5;
 }
 @media (prefers-color-scheme:dark){
   :root{
     --bg:#15130f;--surface:#201d16;--surface2:#292316;--border:#50442b;
     --text:#f0e7d0;--muted:#c2b590;--primary:#68b9ae;--primary2:#8bcfc5;
     --good:#7fc46a;--goodbg:#26361f;--bad:#e88aa0;--badbg:#3a1f27;
-    --gold:#e0aa3e;--goldbg:#3a2c14;
+    --gold:#e0aa3e;--goldbg:#3a2c14;--accent:#c79bea;--accentbg:#2c1f3a;
   }
 }
 html,body{background:var(--bg);color:var(--text)}
@@ -34,43 +34,28 @@ header{display:flex;align-items:center;justify-content:space-between;gap:8px;fle
 h1{font-size:1.35rem;font-weight:700;letter-spacing:-.01em}
 h2{font-size:1.05rem;font-weight:700;margin:0 0 6px}
 .muted{color:var(--muted);font-size:.85rem}
-.status{
-  display:block;background:var(--goodbg);color:var(--good);
-  border:1px solid var(--good);border-radius:10px;
-  padding:8px 10px;font-size:.92rem;font-weight:600;margin-bottom:12px
-}
+.status{display:block;background:var(--goodbg);color:var(--good);border:1px solid var(--good);border-radius:10px;padding:8px 10px;font-size:.92rem;font-weight:600;margin-bottom:12px}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px}
 .row{display:flex;flex-wrap:wrap;gap:8px}
 .statgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
 .statgrid .s{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:8px;text-align:center}
 .statgrid .s b{display:block;font-size:1.15rem}
 .statgrid .s span{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
-.xpwrap{height:8px;background:var(--surface2);border:1px solid var(--border);border-radius:99px;overflow:hidden;margin:6px 0 4px}
-.xpbar{height:100%;background:var(--primary);width:0;transition:width .25s}
+.progresswrap{height:10px;background:var(--surface2);border:1px solid var(--border);border-radius:99px;overflow:hidden;margin:6px 0 4px}
+.progressbar{height:100%;background:var(--primary);width:0;transition:width .25s}
 .modegrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-@media (min-width:520px){.modegrid{grid-template-columns:repeat(4,1fr)}}
-button{
-  font:inherit;color:inherit;background:var(--surface2);border:1px solid var(--border);
-  border-radius:10px;padding:10px 12px;cursor:pointer;
-  -webkit-tap-highlight-color:transparent;touch-action:manipulation;min-height:44px;
-}
+@media (min-width:520px){.modegrid{grid-template-columns:repeat(5,1fr)}}
+button{font:inherit;color:inherit;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;min-height:44px}
 button:active{transform:translateY(1px)}
 .modecard{text-align:left;padding:10px}
 .modecard[aria-pressed="true"]{background:var(--primary);color:#fff;border-color:var(--primary)}
 .modecard small{display:block;font-size:.78rem;opacity:.85;margin-top:2px}
-.qcard{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px}
-.qmeta{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.qcard{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px;position:relative;overflow:hidden}
+.qmeta{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px}
 .qtext{font-size:1.1rem;font-weight:600;margin-bottom:12px;line-height:1.35}
 .answers{display:grid;gap:8px}
-.ans{
-  width:100%;text-align:left;padding:12px;display:flex;gap:10px;align-items:flex-start;
-  background:var(--surface2);
-}
-.ans .L{
-  flex:0 0 28px;height:28px;border-radius:50%;background:var(--surface);
-  border:1px solid var(--border);display:inline-flex;align-items:center;justify-content:center;
-  font-weight:700;font-size:.9rem
-}
+.ans{width:100%;text-align:left;padding:12px;display:flex;gap:10px;align-items:flex-start;background:var(--surface2)}
+.ans .L{flex:0 0 28px;height:28px;border-radius:50%;background:var(--surface);border:1px solid var(--border);display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:.9rem}
 .ans.correct{background:var(--goodbg);border-color:var(--good);color:var(--good)}
 .ans.correct .L{background:var(--good);color:#fff;border-color:var(--good)}
 .ans.wrong{background:var(--badbg);border-color:var(--bad);color:var(--bad)}
@@ -82,23 +67,21 @@ button:active{transform:translateY(1px)}
 .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .btn-primary{background:var(--primary);color:#fff;border-color:var(--primary);font-weight:600}
 .btn-primary:disabled{opacity:.5;cursor:not-allowed}
-.essay textarea{
-  width:100%;min-height:130px;padding:10px;border:1px solid var(--border);
-  border-radius:10px;background:var(--surface2);color:var(--text);
-  font:inherit;resize:vertical
-}
-.essay ul{margin:8px 0 0 18px}
-.essay ul li{margin:2px 0;font-size:.92rem}
 .list{list-style:none;display:grid;gap:6px}
 .list li{display:flex;gap:8px;align-items:flex-start;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:8px}
 .list .t{font-size:.85rem;color:var(--muted)}
 .tag{display:inline-block;font-size:.7rem;background:var(--goldbg);color:var(--gold);border:1px solid var(--gold);border-radius:99px;padding:1px 8px;margin-left:6px;font-weight:700}
-.toast{
-  position:fixed;left:50%;bottom:18px;transform:translateX(-50%) translateY(20px);
-  background:var(--text);color:var(--bg);padding:10px 14px;border-radius:99px;
-  font-size:.9rem;font-weight:600;opacity:0;transition:opacity .2s,transform .2s;pointer-events:none;z-index:50
-}
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%) translateY(20px);background:var(--text);color:var(--bg);padding:10px 14px;border-radius:99px;font-size:.9rem;font-weight:600;opacity:0;transition:opacity .2s,transform .2s;pointer-events:none;z-index:50;max-width:90vw;text-align:center}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.streakbox{display:inline-flex;align-items:center;gap:4px;background:var(--goldbg);color:var(--gold);border:1px solid var(--gold);border-radius:99px;padding:2px 10px;font-weight:700;font-size:.8rem}
+.summary{background:var(--accentbg);border:1px solid var(--accent);color:var(--accent);border-radius:14px;padding:14px;margin-bottom:12px;display:none}
+.summary.show{display:block}
+.summary h2{color:var(--accent)}
+.confetti{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;overflow:hidden}
+.spark{position:absolute;width:8px;height:8px;border-radius:50%;opacity:0;animation:spark .9s ease-out forwards}
+@keyframes spark{0%{opacity:1;transform:translate(0,0) scale(.6)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(1.2)}}
+.celebrate{animation:pulse .5s ease-out}
+@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.02)}100%{transform:scale(1)}}
 footer{margin:18px 0 8px;font-size:.8rem;color:var(--muted);text-align:center}
 footer a{color:var(--primary)}
 </style>
@@ -107,37 +90,38 @@ footer a{color:var(--primary)}
 <div class="wrap">
   <header>
     <h1>Religionsjakten 9</h1>
-    <span class="muted">Snabbstart · åk 9</span>
+    <span class="muted">200 frågor · åk 9</span>
   </header>
 
   <div id="status" class="status" role="status" aria-live="polite">
-    Snabb quizmotor är redo. Allt körs lokalt i webbläsaren – inget skickas iväg.
+    Quizmotor redo. 200 frågor om religion åk 9. Allt körs lokalt – inget skickas iväg.
   </div>
 
   <div class="statgrid" aria-label="Spelstatus">
-    <div class="s"><b id="level">1</b><span>Nivå</span></div>
-    <div class="s"><b id="xp">0</b><span>XP</span></div>
+    <div class="s"><b id="score">0</b><span>Poäng</span></div>
     <div class="s"><b id="streak">0</b><span>Streak</span></div>
+    <div class="s"><b id="best">0</b><span>Rekord</span></div>
     <div class="s"><b id="accuracy">0%</b><span>Träffsäkerhet</span></div>
   </div>
-  <div class="card" aria-label="XP-mätare">
-    <div class="muted">Framsteg till nästa nivå · <span id="xp-next">120</span> XP kvar</div>
-    <div class="xpwrap"><div id="xp-meter" class="xpbar"></div></div>
-    <div class="muted"><span id="answered">0</span> svar · <span id="score">0</span> rätt</div>
+  <div class="card" aria-label="Framsteg">
+    <div class="muted">Fråga <span id="qnum">1</span> av <span id="qtotal">200</span> i <span id="mode-label">Alla kategorier</span></div>
+    <div class="progresswrap"><div id="progress" class="progressbar"></div></div>
+    <div class="muted"><span id="answered">0</span> svar · <span id="correct">0</span> rätt</div>
   </div>
 
   <div class="card">
-    <h2>Välj uppdrag</h2>
-    <div id="mode-grid" class="modegrid" role="group" aria-label="Quizlägen">
-      <button class="modecard" type="button" data-mode="religioner" aria-pressed="true">Världsreligioner<small>Begrepp, urkunder, högtider</small></button>
-      <button class="modecard" type="button" data-mode="etik" aria-pressed="false">Etik & livsfrågor<small>Modeller, dilemman</small></button>
-      <button class="modecard" type="button" data-mode="samhalle" aria-pressed="false">Religion & samhälle<small>Sekularisering, källkritik</small></button>
-      <button class="modecard" type="button" data-mode="mix" aria-pressed="false">Prov-sprint<small>Blandat innehåll</small></button>
+    <h2>Välj kategori</h2>
+    <div id="mode-grid" class="modegrid" role="group" aria-label="Kategorier">
+      <button class="modecard" type="button" data-mode="all" aria-pressed="true">Alla<small>200 frågor</small></button>
+      <button class="modecard" type="button" data-mode="v" aria-pressed="false">Världsreligioner<small>Tro & urkunder</small></button>
+      <button class="modecard" type="button" data-mode="e" aria-pressed="false">Etik & livsfrågor<small>Modeller & dilemman</small></button>
+      <button class="modecard" type="button" data-mode="s" aria-pressed="false">Religion & samhälle<small>Sverige & sekularisering</small></button>
+      <button class="modecard" type="button" data-mode="k" aria-pressed="false">Begrepp & källkritik<small>Jämförelse & analys</small></button>
     </div>
   </div>
 
   <div class="qcard" id="question-card" aria-live="polite">
-    <div class="qmeta"><span id="quest-title">Dagens expedition</span> · <span id="mode-label">Världsreligioner</span></div>
+    <div class="qmeta"><span id="quest-cat">Kategori</span><span class="streakbox" id="streakbox" aria-label="Streak">🔥 <span id="streak2">0</span></span></div>
     <div class="qtext" id="question-text">Laddar fråga …</div>
     <div class="answers" id="answers"></div>
     <div class="fb" id="feedback" aria-live="polite">
@@ -146,20 +130,19 @@ footer a{color:var(--primary)}
     </div>
     <div class="actions">
       <button id="next-question" class="btn-primary" type="button" disabled>Nästa fråga</button>
-      <button id="new-question" type="button">Ny fråga</button>
-      <button id="explain-more" type="button">Resonemangsnyckel</button>
+      <button id="shuffle" type="button">Blanda om</button>
+      <button id="restart" type="button">Starta om</button>
     </div>
+    <div class="confetti" id="confetti" aria-hidden="true"></div>
   </div>
 
-  <div class="card essay">
-    <h2>Mini-essä</h2>
-    <p class="muted" id="essay-prompt">Förklara hur religion kan påverka både individ och samhälle. Ge minst två exempel.</p>
-    <textarea id="essay-answer" placeholder="Skriv ditt utvecklade resonemang här …"></textarea>
+  <div class="summary" id="summary" aria-live="polite">
+    <h2>🏆 Klart! Du har gått igenom alla frågor</h2>
+    <p><b id="sum-score">0</b> rätt av <b id="sum-total">0</b> · träffsäkerhet <b id="sum-acc">0%</b></p>
+    <p>Bästa streak: <b id="sum-best">0</b> · Total poäng: <b id="sum-points">0</b></p>
     <div class="actions">
-      <button id="essay-check" class="btn-primary" type="button">Checka mot kriterierna</button>
-      <button id="essay-new" type="button">Ny uppgift</button>
+      <button id="sum-restart" class="btn-primary" type="button">Spela igen</button>
     </div>
-    <ul id="essay-feedback"></ul>
   </div>
 
   <div class="card">
@@ -167,13 +150,8 @@ footer a{color:var(--primary)}
     <ul id="badges" class="list"></ul>
   </div>
 
-  <div class="card">
-    <h2>Dagens uppdrag</h2>
-    <ul id="missions" class="list"></ul>
-  </div>
-
   <footer>
-    Snabbversion utan externa resurser · <a href="full.html">Öppna full version</a>
+    Snabbversion · 200 frågor · inga externa resurser · <a href="full.html">Tidigare full version</a>
   </footer>
 </div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
@@ -181,79 +159,68 @@ footer a{color:var(--primary)}
 <script>
 (function(){
 "use strict";
-var MODES={religioner:"Världsreligioner",etik:"Etik och livsfrågor",samhalle:"Religion och samhälle",mix:"Prov-sprint"};
-var QUESTIONS=[
-{mode:"religioner",q:"Vilket begrepp beskriver tron på en enda gud?",options:["Polyteism","Monoteism","Ateism","Animism"],answer:1,why:"Monoteism betyder tro på en gud. Judendom, kristendom och islam räknas ofta som monoteistiska religioner.",key:"Använd begreppet och ge gärna exempel. Jämför med polyteism, som betyder tro på flera gudar."},
-{mode:"religioner",q:"Vilken av följande högtider hör tydligast ihop med judendomens befrielseberättelse från Egypten?",options:["Pesach","Diwali","Vesak","Ramadan"],answer:0,why:"Pesach firas till minne av israeliternas uttåg ur Egypten och är central i judisk tradition.",key:"Koppla högtiden till berättelsen, ritualer och identitet."},
-{mode:"religioner",q:"Vad är karma i hinduism och buddhism främst kopplat till?",options:["En helig byggnad","Handlingar och deras följder","En profet","Ett matförbud"],answer:1,why:"Karma handlar om hur handlingar får konsekvenser, ofta kopplat till återfödelse och moralisk utveckling.",key:"För högre kvalitet: visa likhet och skillnad mellan hinduismens och buddhismens syn på återfödelse."},
-{mode:"religioner",q:"Vilken urkund är central inom islam?",options:["Tripitaka","Koranen","Tanakh","Nya testamentet"],answer:1,why:"Koranen betraktas inom islam som Guds uppenbarelse till Muhammed.",key:"Förklara gärna att hadither också är viktiga, men att frågan gäller central urkund."},
-{mode:"religioner",q:"Vilket påstående stämmer bäst om de abrahamitiska religionerna?",options:["De saknar historiska rötter i Mellanöstern","De räknar Abraham som en viktig gestalt","De tror alltid på återfödelse","De har samma syn på Jesus"],answer:1,why:"Judendom, kristendom och islam kallas abrahamitiska eftersom Abraham är en viktig gestalt i traditionerna.",key:"Ett starkt svar nämner både gemensamma rötter och viktiga skillnader."},
-{mode:"religioner",q:"Vad är nirvana inom buddhismen?",options:["En gudomlig dom","Ett tillstånd där lidande och begär upphör","En synagoga","En kristen bön"],answer:1,why:"Nirvana beskriver befrielse från lidande, begär och återfödelsens kretslopp.",key:"Knyt gärna till de fyra ädla sanningarna och den åttafaldiga vägen."},
-{mode:"etik",q:"Vilken etisk modell bedömer främst om handlingens följder blir så goda som möjligt?",options:["Pliktetik","Konsekvensetik","Dygdetik","Religionsfrihet"],answer:1,why:"Konsekvensetik fokuserar på resultatet av handlingen: vilka konsekvenser den får för olika personer.",key:"I ett provsvar: väg olika konsekvenser mot varandra och visa vem som påverkas."},
-{mode:"etik",q:"Vad kännetecknar pliktetik?",options:["Att regler och skyldigheter är centrala","Att bara känslor avgör","Att majoriteten alltid har rätt","Att religion inte får diskuteras"],answer:0,why:"Pliktetik bedömer handlingar utifrån regler, rättigheter och skyldigheter, inte bara resultat.",key:"Visa kontrast mot konsekvensetik: en handling kan ses som fel även om den råkar ge bra följder."},
-{mode:"etik",q:"En elev hittar svaren till ett prov på nätet. Vilken fråga passar bäst för dygdetik?",options:["Vilket straff får eleven?","Vilken typ av person blir jag om jag fuskar?","Hur många poäng tjänar eleven?","Vilken religion förbjuder internet?"],answer:1,why:"Dygdetik handlar om egenskaper och karaktär: ärlighet, mod, ansvar och vilken människa man vill vara.",key:"Dygdetik blir starkare när du nämner konkreta dygder och hur de påverkar handlingen."},
-{mode:"etik",q:"Vad betyder 'livsfråga' i religionskunskap?",options:["En fråga som bara har ett facit","En fråga om mening, identitet, död, ansvar eller hur man bör leva","En fråga som bara präster får svara på","En fråga om matlagning"],answer:1,why:"Livsfrågor handlar om existentiella och etiska frågor som människor kan besvara på olika sätt.",key:"Jämför gärna religiösa och sekulära svar på samma livsfråga."},
-{mode:"etik",q:"Vilket exempel visar bäst ett etiskt dilemma?",options:["Att välja mellan två glassmaker","Att välja mellan att tala sanning och skydda en vän från skada","Att komma ihåg en religiös högtid","Att lära sig ett begrepp"],answer:1,why:"Ett etiskt dilemma innebär att viktiga värden krockar, till exempel ärlighet och omsorg.",key:"Ett bra resonemang visar konflikten mellan värden och väger argument på båda sidor."},
-{mode:"samhalle",q:"Vad menas med sekularisering i Sverige?",options:["Att religion blir den enda lagen","Att religionens roll i samhälle och vardag ofta minskar eller förändras","Att alla måste vara ateister","Att alla religioner förbjuds"],answer:1,why:"Sekularisering handlar om att religionens samhälleliga roll minskar eller förändras, men religion kan fortfarande vara viktig för individer och grupper.",key:"Nyansera: Sverige kan vara sekulariserat på samhällsnivå samtidigt som människor är religiösa privat."},
-{mode:"samhalle",q:"Vilket påstående om religionsfrihet i Sverige är mest korrekt?",options:["Man får bara tro privat","Man har rätt att tro, byta religion, lämna religion och utöva religion inom lagens ramar","Religionsfrihet gäller bara majoritetsreligionen","Religionsfrihet betyder att kritik mot religion är förbjuden"],answer:1,why:"Religionsfrihet omfattar både frihet till religion och frihet från religion, men den samspelar med andra lagar och rättigheter.",key:"Högre nivå: resonera om gränser när rättigheter krockar, till exempel säkerhet, diskriminering eller skolans regler."},
-{mode:"samhalle",q:"Varför är källkritik viktigt när man läser om religion på sociala medier?",options:["För att alla religiösa källor alltid ljuger","För att religion aldrig får kritiseras","För att förenklingar, stereotyper och starka åsikter kan spridas snabbt","För att bara gamla böcker kan vara sanna"],answer:2,why:"Religion framställs ibland förenklat eller vinklat. Källkritik hjälper dig att bedöma avsändare, syfte, urval och trovärdighet.",key:"Använd begrepp som avsändare, syfte, tendens, beroende och aktualitet."},
-{mode:"samhalle",q:"Vad är en stereotyp bild av religion?",options:["En nyanserad beskrivning med flera perspektiv","En förenklad generalisering om en grupp","En historisk tidslinje","En religiös byggnad"],answer:1,why:"En stereotyp är en förenklad och ofta generaliserande bild som missar variation inom grupper.",key:"Visa att religioner inte är enhetliga: människor tolkar och praktiserar på olika sätt."},
-{mode:"samhalle",q:"Vilket resonemang är mest nyanserat?",options:["Religion leder alltid till konflikt","Religion leder aldrig till konflikt","Religion kan bidra till både konflikt, fredsarbete, identitet och gemenskap beroende på sammanhang","Religion påverkar bara historien, aldrig nutiden"],answer:2,why:"Ett nyanserat resonemang visar flera möjliga samband och undviker absoluta påståenden.",key:"För provnivå: använd 'å ena sidan/å andra sidan' och förklara vilka faktorer som påverkar."}
-];
-var ESSAYS=[
-"Förklara hur religion kan påverka både individ och samhälle. Ge minst två exempel.",
-"Jämför hur två religioner kan svara på en livsfråga, till exempel meningen med livet eller vad som händer efter döden.",
-"Resonera om ett etiskt dilemma med hjälp av minst två etiska modeller.",
-"Förklara vad sekularisering kan innebära i Sverige och varför religion ändå kan vara viktig.",
-"Välj en religiös tradition och visa hur ritualer kan skapa identitet och gemenskap."
-];
+var MODES={all:"Alla kategorier",v:"Världsreligioner",e:"Etik och livsfrågor",s:"Religion och samhälle",k:"Begrepp och källkritik"};
+var QUESTIONS=[{"m":"v","q":"Vilken är judendomens viktigaste urkund?","o":["Koranen","Tanakh","Tripitaka","Bhagavad-Gita"],"a":1,"w":"Tanakh innehåller Toran, profeterna och skrifterna och är judendomens centrala urkund."},{"m":"v","q":"Vad heter judendomens veckovila?","o":["Sabbat","Eid","Diwali","Påsk"],"a":0,"w":"Sabbaten firas från fredag kväll till lördag kväll och är en helig vilodag."},{"m":"v","q":"Vilken högtid firar att judarna befriades från slaveriet i Egypten?","o":["Sukkot","Jom kippur","Pesach","Chanukka"],"a":2,"w":"Pesach (påsk) firas till minne av uttåget ur Egypten."},{"m":"v","q":"Vad är en synagoga?","o":["En judisk gudstjänstlokal","En muslimsk böneplats","Ett buddhistiskt tempel","En hinduisk altare"],"a":0,"w":"Synagogan är judendomens samlingsplats för bön, studier och gudstjänst."},{"m":"v","q":"Vem ses som judendomens stamfar?","o":["Mose","Abraham","David","Salomo"],"a":1,"w":"Abraham räknas som de tre abrahamitiska religionernas stamfader."},{"m":"v","q":"Vad är kosher?","o":["En judisk tideräkning","Judiska matregler","En judisk högtid","En judisk bön"],"a":1,"w":"Kosher är regler för vad och hur man får äta enligt judisk lag."},{"m":"v","q":"Vad kallas judendomens initiationsfest för 13-åriga pojkar?","o":["Bar mitzvah","Bat mitzvah","Brit mila","Shabbat"],"a":0,"w":"Bar mitzvah markerar att pojken blir religiöst myndig. Motsvarigheten för flickor heter bat mitzvah."},{"m":"v","q":"Vad är Toran?","o":["De fem Moseböckerna","Profeternas brev","En samling psalmer","En judisk filosofibok"],"a":0,"w":"Toran består av de fem Moseböckerna och är judendomens mest centrala text."},{"m":"v","q":"Vilken högtid kallas försoningsdagen inom judendomen?","o":["Rosh hashana","Jom kippur","Sukkot","Purim"],"a":1,"w":"Jom kippur är försoningsdagen då man söker förlåtelse och fastar."},{"m":"v","q":"Vilket av följande är ett judiskt symbolföremål?","o":["Menora","Mihrab","Mala","Khanda"],"a":0,"w":"Menoran är den sjuarmade ljusstaken och en av judendomens äldsta symboler."},{"m":"v","q":"Vem var Mose?","o":["En profet som ledde judarna ur Egypten","Den förste kungen i Israel","En romersk kejsare","En grekisk filosof"],"a":0,"w":"Mose ledde enligt traditionen israeliterna ut ur Egypten och tog emot Toran på berget Sinai."},{"m":"v","q":"Vad är en rabbin?","o":["En judisk lärare och religiös ledare","En muslimsk imam","En kristen biskop","En hinduisk präst"],"a":0,"w":"Rabbinen är en lärd lärare som tolkar Tora och leder gudstjänster."},{"m":"v","q":"Vilken är kristendomens viktigaste urkund?","o":["Bibeln","Koranen","Vedaskrifterna","Tripitaka"],"a":0,"w":"Bibeln, som består av Gamla och Nya testamentet, är kristendomens heliga skrift."},{"m":"v","q":"Vad firar kristna i påsken?","o":["Jesu födelse","Jesu död och uppståndelse","Pingstundret","Marie bebådelse"],"a":1,"w":"Påsken är kristendomens viktigaste högtid och firar att Jesus dog och uppstod från de döda."},{"m":"v","q":"Vad firar kristna i julen?","o":["Jesu födelse","Jesu uppståndelse","Den heliga andens utgjutelse","Jesu dop"],"a":0,"w":"Julen firar Jesu födelse i Betlehem."},{"m":"v","q":"Vilken bok i Bibeln innehåller berättelser om Jesu liv?","o":["Första Moseboken","Evangelierna","Psaltaren","Uppenbarelseboken"],"a":1,"w":"De fyra evangelierna – Matteus, Markus, Lukas och Johannes – berättar om Jesu liv och förkunnelse."},{"m":"v","q":"Vad är treenigheten?","o":["Tre olika gudar","Fader, Son och helig Ande som en Gud","Tre profeter","Tre heliga böcker"],"a":1,"w":"Treenighetsläran säger att Gud är en, men finns som Fader, Son och helig Ande."},{"m":"v","q":"Vad kallas det kristna ritualet där bröd och vin delas ut?","o":["Dop","Konfirmation","Nattvard","Vigsel"],"a":2,"w":"Nattvarden påminner om Jesu sista måltid och är central i många kristna gudstjänster."},{"m":"v","q":"Vilken är den största kristna kyrkan i världen sett till antal medlemmar?","o":["Romersk-katolska kyrkan","Svenska kyrkan","Pingstkyrkan","Ortodoxa kyrkan"],"a":0,"w":"Romersk-katolska kyrkan har över en miljard medlemmar och leds av påven."},{"m":"v","q":"Vem leder den romersk-katolska kyrkan?","o":["Patriarken","Påven","Ärkebiskopen","Imamen"],"a":1,"w":"Påven är den katolska kyrkans högste ledare och har sitt säte i Vatikanstaten."},{"m":"v","q":"Vilken kristen riktning är störst i Sverige historiskt sett?","o":["Katolicism","Ortodox kristendom","Lutherdom","Pingströrelsen"],"a":2,"w":"Sverige har sedan reformationen på 1500-talet varit präglat av evangelisk-luthersk kristendom."},{"m":"v","q":"Vad är ett dop inom kristendomen?","o":["En ritual där man tas upp i den kristna gemenskapen","En religiös fasta","En högtid för de döda","Ett bönemöte"],"a":0,"w":"Genom dopet upptas en människa i den kristna kyrkan; det utförs ofta med vatten."},{"m":"v","q":"Vem var Martin Luther?","o":["En tysk reformator på 1500-talet","En romersk påve","En judisk profet","En engelsk kung"],"a":0,"w":"Martin Luther kritiserade den katolska kyrkan på 1500-talet och inledde reformationen."},{"m":"v","q":"Vad är de tio budorden enligt Bibeln?","o":["Tio etiska och religiösa regler","Tio profeter","Tio högtider","Tio kyrkor"],"a":0,"w":"De tio budorden är centrala etiska och religiösa regler som enligt Bibeln gavs till Mose."},{"m":"v","q":"Vilken högtid firar kristna 50 dagar efter påsk?","o":["Pingst","Jul","Trettondedagen","Allhelgonadagen"],"a":0,"w":"Pingsten firar att den heliga Anden kom till lärjungarna och ses som kyrkans födelsedag."},{"m":"v","q":"Vilket är kristendomens viktigaste symbol?","o":["Halvmånen","Korset","Davidsstjärnan","Hjulet"],"a":1,"w":"Korset påminner om Jesu död och uppståndelse och är kristendomens mest använda symbol."},{"m":"v","q":"Vad heter islams heliga bok?","o":["Tanakh","Bibeln","Koranen","Vedaskrifterna"],"a":2,"w":"Koranen anses inom islam vara Guds ord uppenbarat för Muhammed genom ängeln Gabriel."},{"m":"v","q":"Vem var Muhammed inom islam?","o":["Den siste profeten","En kristen lärjunge","En judisk kung","En hinduisk gudom"],"a":0,"w":"Muhammed räknas i islam som Guds siste och slutgiltige profet."},{"m":"v","q":"Hur många pelare har islam?","o":["Tre","Fyra","Fem","Sex"],"a":2,"w":"Islams fem pelare är trosbekännelsen, bönen, allmosan, fastan och vallfärden."},{"m":"v","q":"Vad heter den månad då muslimer fastar?","o":["Ramadan","Muharram","Eid","Hajj"],"a":0,"w":"Under ramadan fastar muslimer från soluppgång till solnedgång."},{"m":"v","q":"Vad kallas vallfärden till Mecka?","o":["Eid","Hajj","Salat","Zakat"],"a":1,"w":"Hajj är vallfärden till Mecka, en av islams fem pelare för dem som har möjlighet."},{"m":"v","q":"Vad är en moské?","o":["En muslimsk böneplats","En judisk synagoga","En kristen kyrka","Ett hinduiskt tempel"],"a":0,"w":"Moskén är muslimers samlings- och böneplats."},{"m":"v","q":"I vilken stad finns Kaba?","o":["Medina","Jerusalem","Mecka","Kairo"],"a":2,"w":"Kaba i Mecka är islams heligaste plats och vänds mot vid bön."},{"m":"v","q":"Hur många gånger per dag ska en troende muslim be enligt traditionen?","o":["Tre","Fem","Sju","En"],"a":1,"w":"De fem dagliga bönerna (salat) är en av islams fem pelare."},{"m":"v","q":"Vad innebär trosbekännelsen (shahada) i islam?","o":["Att man är muslim om man säger att det finns en Gud och att Muhammed är Hans profet","Att man måste resa till Mecka","Att man äter halal","Att man avstår alkohol"],"a":0,"w":"Shahadan – 'det finns ingen gud utom Gud och Muhammed är Hans profet' – är islams trosbekännelse."},{"m":"v","q":"Vad är skillnaden mellan sunni och shia främst kopplad till?","o":["Olika urkunder","Vem som skulle leda muslimerna efter Muhammeds död","Olika gudar","Olika bönetider"],"a":1,"w":"Splittringen mellan sunni och shia uppstod ur frågan om vem som skulle efterträda Muhammed som ledare."},{"m":"v","q":"Vad är halal?","o":["Förbjudna handlingar","Tillåtet enligt islamisk lag","En högtid","En profet"],"a":1,"w":"Halal betyder 'tillåtet' och används bland annat om mat och handlingar som är tillåtna."},{"m":"v","q":"Vad är haram?","o":["Tillåtet","Förbjudet enligt islamisk lag","En typ av fasta","En typ av bön"],"a":1,"w":"Haram är motsatsen till halal och betyder 'förbjudet'."},{"m":"v","q":"Vad heter den högtid som avslutar ramadan?","o":["Eid al-fitr","Eid al-adha","Pesach","Diwali"],"a":0,"w":"Eid al-fitr firar avslutningen av fastemånaden ramadan."},{"m":"v","q":"Vilken stad är islams näst heligaste plats efter Mecka?","o":["Jerusalem","Medina","Bagdad","Kairo"],"a":1,"w":"Medina är där Muhammed levde efter utvandringen från Mecka och hans grav finns där; den är islams näst heligaste stad."},{"m":"v","q":"Vilket land har flest hinduer?","o":["Indien","Kina","Indonesien","Pakistan"],"a":0,"w":"De flesta hinduer i världen bor i Indien."},{"m":"v","q":"Vad är reinkarnation i hinduismen?","o":["Att själen återföds i en ny kropp","Att man döps","Att man läser Vedaskrifterna","Att man går i exil"],"a":0,"w":"Reinkarnation innebär att själen (atman) återföds i en ny kropp efter döden."},{"m":"v","q":"Vad är moksha inom hinduismen?","o":["En högtid","Befrielse från återfödelsens kretslopp","En guds namn","En fasta"],"a":1,"w":"Moksha är det yttersta målet: befrielse från samsaras kretslopp av död och återfödelse."},{"m":"v","q":"Vilken av följande är en hinduisk gudom?","o":["Vishnu","Allah","Buddha","Jesus"],"a":0,"w":"Vishnu är en av hinduismens centrala gudar och anses upprätthålla världen."},{"m":"v","q":"Vilka är de äldsta heliga skrifterna i hinduismen?","o":["Vedaskrifterna","Tripitaka","Tanakh","Koranen"],"a":0,"w":"Vedaskrifterna är hinduismens äldsta heliga texter."},{"m":"v","q":"Vad är dharma i hinduismen?","o":["En högtid","Plikt och rätt sätt att leva","En fasta","En bön"],"a":1,"w":"Dharma står för plikt, ordning och rätt levnadssätt utifrån ens roll i samhället."},{"m":"v","q":"Vilken högtid kallas ljusets högtid och firas av många hinduer?","o":["Diwali","Pesach","Ramadan","Vesak"],"a":0,"w":"Diwali är ljusets fest och firas till minne av att det goda segrar över det onda."},{"m":"v","q":"Vad är en avatar inom hinduismen?","o":["En digital figur","En guds inkarnation på jorden","En tempelbyggnad","En etisk regel"],"a":1,"w":"En avatar är en gudomlig gestalts inkarnation, t.ex. Krishna och Rama som avatarer av Vishnu."},{"m":"v","q":"Vilken flod räknas som särskilt helig inom hinduismen?","o":["Nilen","Ganges","Donau","Jordan"],"a":1,"w":"Floden Ganges anses helig och bad i floden tros rena från synder."},{"m":"v","q":"Vad är ett kastsystem?","o":["En traditionell social indelning som funnits i Indien","En religiös högtid","Ett straff","En ritual för giftermål"],"a":0,"w":"Kastsystemet är ett traditionellt indelningssystem som präglat det indiska samhället. Det är förbjudet i lag i Indien idag, men påverkar fortfarande socialt."},{"m":"v","q":"Vem grundade buddhismen?","o":["Siddharta Gautama","Konfucius","Muhammed","Mose"],"a":0,"w":"Siddharta Gautama, även känd som Buddha, levde för cirka 2500 år sedan i nuvarande Nepal/Indien."},{"m":"v","q":"Vad betyder ordet Buddha?","o":["Den uppvaknade","Den helige","Den lärde","Den utvalde"],"a":0,"w":"Buddha betyder 'den uppvaknade' eller 'den upplyste'."},{"m":"v","q":"Vad är de fyra ädla sanningarna kopplade till?","o":["Lidandet och vägen ur det","Skapelseberättelsen","De tio budorden","Vallfärden"],"a":0,"w":"De fyra ädla sanningarna handlar om lidandets verklighet, dess orsak, dess upphörande och vägen dit."},{"m":"v","q":"Vad heter den åttafaldiga vägen?","o":["En åtta steg lång regel för meditation och liv","En lista över gudar","En rituell dans","En högtid"],"a":0,"w":"Den åttafaldiga vägen är en metod för att leva rätt och nå nirvana."},{"m":"v","q":"Vad är karma i buddhismen?","o":["Ödesgudinnan","Att handlingar får följder","En högtid","En tempelbyggnad"],"a":1,"w":"Karma innebär att handlingar och avsikter påverkar framtida liv och omständigheter."},{"m":"v","q":"Vad firar buddhister på Vesak?","o":["Buddhas födelse, uppvaknande och död","Skördefest","Befrielsen från Egypten","Profetens födelse"],"a":0,"w":"Vesak är buddhismens viktigaste högtid och firar händelser i Buddhas liv."},{"m":"v","q":"Vad är ett buddhistiskt tempel ofta kallat?","o":["Pagod eller wat","Synagoga","Moské","Kyrka"],"a":0,"w":"Pagod (Östasien) och wat (Sydostasien) är vanliga ord för buddhistiska tempel."},{"m":"v","q":"Vad är en munk inom buddhismen?","o":["En person som lever asketiskt enligt buddhistiska regler","En kristen präst","En judisk lärd","En muslimsk imam"],"a":0,"w":"Buddhistiska munkar lever ofta i kloster och följer en regel som heter vinaya."},{"m":"v","q":"Vad är meditation i buddhismen ofta till för?","o":["Att samla pengar","Att träna sinnet och nå insikt","Att lära sig läsa","Att fasta"],"a":1,"w":"Meditation används för att stilla sinnet, träna medvetenhet och nå insikt."},{"m":"v","q":"Vad heter buddhismens lära som helhet?","o":["Dharma","Dao","Halacha","Sharia"],"a":0,"w":"Buddhas lära kallas dharma och utgör en av de tre tillflykterna i buddhismen."},{"m":"v","q":"Vilken religion är störst i världen mätt i antal anhängare?","o":["Islam","Hinduism","Kristendom","Buddhism"],"a":2,"w":"Kristendomen räknas som världens största religion följt av islam."},{"m":"v","q":"Vilka tre religioner kallas abrahamitiska?","o":["Hinduism, buddhism och daoism","Judendom, kristendom och islam","Shinto, judendom och kristendom","Islam, hinduism och buddhism"],"a":1,"w":"Judendom, kristendom och islam delar Abraham som viktig stamfar och kallas därför abrahamitiska."},{"m":"v","q":"Vad menas med polyteism?","o":["Tro på en gud","Tro på flera gudar","Avsaknad av gudstro","Tro på naturen"],"a":1,"w":"Polyteism innebär tro på flera gudar, t.ex. inom hinduism och i antikens religioner."},{"m":"v","q":"Vad betyder ateism?","o":["Tro på flera gudar","Tro på en gud","Att inte tro på någon gud","Att tro på naturen"],"a":2,"w":"Ateism innebär att man inte tror på någon gud eller några gudar."},{"m":"v","q":"Vad betyder agnosticism?","o":["Säker övertygelse om att Gud finns","Säker övertygelse om att Gud inte finns","Att man menar att frågan om Guds existens inte går att avgöra","Tro på flera gudar"],"a":2,"w":"Agnostiker menar att det inte går att veta säkert om Gud finns eller inte."},{"m":"v","q":"Vad är sikhism?","o":["En religion som uppstod i Punjab och tror på en gud","En judisk inriktning","En kristen kyrka","En hinduisk filosofi"],"a":0,"w":"Sikhismen grundades av Guru Nanak på 1400-talet i Punjab och är monoteistisk."},{"m":"v","q":"Vad är shinto?","o":["En japansk religion med fokus på andar och förfäder","En kinesisk filosofisk skola","En kristen riktning","En judisk gren"],"a":0,"w":"Shinto är ursprungsreligionen i Japan och betonar dyrkan av kami (andar) och förfäder."},{"m":"v","q":"Vilken religion är vanligast i Thailand?","o":["Kristendom","Islam","Buddhism","Hinduism"],"a":2,"w":"Theravada-buddhism är majoritetens religion i Thailand."},{"m":"v","q":"Vilken religion är majoritet i Indonesien?","o":["Hinduism","Islam","Kristendom","Buddhism"],"a":1,"w":"Indonesien är världens folkrikaste muslimska land."},{"m":"v","q":"Vilken religion är vanligast i Israel?","o":["Judendom","Islam","Kristendom","Hinduism"],"a":0,"w":"Judendomen är majoritetsreligion i Israel."},{"m":"e","q":"Vilken etisk modell utgår främst från handlingens följder?","o":["Pliktetik","Konsekvensetik","Dygdetik","Sinnelagsetik"],"a":1,"w":"Konsekvensetik bedömer en handling utifrån de följder den får."},{"m":"e","q":"Vilken etisk modell utgår främst från regler och skyldigheter?","o":["Konsekvensetik","Pliktetik","Dygdetik","Avsiktsetik"],"a":1,"w":"Pliktetik säger att vissa handlingar är rätt eller fel oberoende av följder."},{"m":"e","q":"Vilken etisk modell fokuserar på vilken slags person man bör vara?","o":["Pliktetik","Konsekvensetik","Dygdetik","Lagetik"],"a":2,"w":"Dygdetiken handlar om karaktär och egenskaper, t.ex. mod, ärlighet och rättvisa."},{"m":"e","q":"Vilken etisk modell utgår från avsikten med handlingen?","o":["Sinnelagsetik","Konsekvensetik","Lagetik","Marknadsetik"],"a":0,"w":"Sinnelagsetik (avsiktsetik) bedömer handlingar utifrån avsikten bakom dem."},{"m":"e","q":"Vad är ett etiskt dilemma?","o":["En enkel fråga med ett rätt svar","En situation där olika värden krockar","Ett matematiskt problem","En logisk paradox utan moralisk innebörd"],"a":1,"w":"Ett etiskt dilemma uppstår när viktiga värden står emot varandra och inget val är helt utan kostnad."},{"m":"e","q":"Den gyllene regeln säger att man ska:","o":["Vara starkast","Behandla andra som man själv vill bli behandlad","Alltid följa lagen","Aldrig ljuga"],"a":1,"w":"Den gyllene regeln finns i flera religioner och säger att man ska göra mot andra som man vill att andra ska göra mot en."},{"m":"e","q":"Vad menas med samvete?","o":["En lag i Sverige","En inre känsla för vad som är rätt och fel","En religiös skrift","En politisk åsikt"],"a":1,"w":"Samvetet är vår inre kompass för moraliska frågor och formas av uppfostran, kultur och egna erfarenheter."},{"m":"e","q":"Vad är en moralisk fråga?","o":["En fråga om priser","En fråga om vad som är rätt eller fel att göra","En fråga om geografi","En fråga om matematik"],"a":1,"w":"Moraliska frågor handlar om vad som är rätt och fel i mänskligt handlande."},{"m":"e","q":"Vad är skillnaden mellan etik och moral?","o":["Det är samma sak utan skillnad","Etik är reflektionen, moralen själva handlandet","Etik är religiös, moral är politisk","Moral är reflektionen, etik är handlandet"],"a":1,"w":"I skolsammanhang sägs ofta att moral är handlandet och etik den teoretiska reflektionen kring det."},{"m":"e","q":"En människa hjälper en främling utan att få något tillbaka. Hur skulle dygdetik troligast bedöma detta?","o":["Som dåligt om det inte ger följare","Som gott eftersom hjälpsamhet är en dygd","Som neutralt om lagen tillåter","Som dåligt om det bryter mot regler"],"a":1,"w":"Dygdetiken värdesätter dygder som omsorg och hjälpsamhet; en sådan handling visar god karaktär."},{"m":"e","q":"Att avstå från att ljuga oavsett följder är typiskt för:","o":["Konsekvensetik","Pliktetik","Marknadsetik","Sinnelagsetik"],"a":1,"w":"Pliktetiken kan säga att lögn alltid är fel oavsett vilka följder den får."},{"m":"e","q":"Vad menas med människovärde?","o":["Att alla människor har lika och okränkbart värde","Att rikedom avgör värde","Att religiösa har högre värde","Att medborgarskap krävs för värde"],"a":0,"w":"Människovärdesprincipen säger att alla människor har samma okränkbara värde, oberoende av egenskaper eller status."},{"m":"e","q":"Vilket är ett gott exempel på solidaritet?","o":["Att bara hjälpa sin egen familj","Att stötta utsatta även när det kostar något","Att undvika att engagera sig","Att alltid följa majoriteten"],"a":1,"w":"Solidaritet betyder att stå upp för andra, även när det kräver något av en själv."},{"m":"e","q":"Sokrates frågor kring 'hur bör man leva?' visar att etiken handlar om:","o":["Lagstiftning bara","Reflektion över det goda livet","Ekonomi","Religiösa ritualer"],"a":1,"w":"Sokrates och andra filosofer ställde frågor om det goda livet, vilket är centralt i etisk reflektion."},{"m":"e","q":"Vad är jämlikhet?","o":["Att alla har lika värde och rättigheter","Att alla har samma åsikter","Att alla har samma yrke","Att alla tillhör samma religion"],"a":0,"w":"Jämlikhet betyder att människor har lika rättigheter och värde."},{"m":"e","q":"Vad är jämställdhet?","o":["Lika rättigheter och möjligheter mellan kön","Att alla får samma lön","Att alla bor lika","Att alla har samma religion"],"a":0,"w":"Jämställdhet handlar specifikt om jämlikhet mellan kvinnor, män och andra könsidentiteter."},{"m":"e","q":"Vilken livsfråga handlar främst om mening?","o":["Vad är vatten?","Varför finns jag och vad ska jag göra med mitt liv?","Hur löser man ekvationer?","När bildades EU?"],"a":1,"w":"Livsfrågor om mening handlar om varför vi finns och vad som gör livet värdefullt."},{"m":"e","q":"En egoistisk handling sätter främst:","o":["Andras intressen först","Egna intressen först oavsett andra","Naturen först","Lagen först"],"a":1,"w":"Egoism innebär att man främst tänker på sig själv, vilket etiskt ofta kritiseras."},{"m":"e","q":"Empati handlar om att:","o":["Förstå och dela andras känslor","Få egna mål","Tävla med andra","Lyda regler"],"a":0,"w":"Empati är förmågan att leva sig in i andras känslor och perspektiv."},{"m":"e","q":"Vilken modell skulle kunna säga: 'Stöld är fel även om den ger goda följder'?","o":["Pliktetik","Konsekvensetik","Marknadsetik","Egoism"],"a":0,"w":"Pliktetiken kan hävda att vissa handlingar alltid är fel oavsett följder."},{"m":"e","q":"Vad menas med hederskultur?","o":["En kultur där släktens ära styr kontroll av särskilt flickor och kvinnor","En sportkultur","En matkultur","En digital kultur"],"a":0,"w":"Hederskultur är ett begrepp för normer där släktens ära kopplas till kontroll, ofta särskilt av kvinnors frihet."},{"m":"e","q":"Vilket är ett konkret exempel på en livsfråga?","o":["Hur långt är ett kilometer?","Vad händer efter döden?","Vilken är Sveriges huvudstad?","Vad heter molnen?"],"a":1,"w":"Frågan om vad som händer efter döden är en typisk existentiell livsfråga."},{"m":"e","q":"I trolley-dilemmat (spårvagnsdilemmat) ställs ofta:","o":["Pliktetik mot konsekvensetik","Konsekvensetik mot egoism","Pliktetik mot lagetik","Marknadsetik mot etik"],"a":0,"w":"I dilemmat står ofta plikten att inte aktivt skada någon mot konsekvensen att rädda flera liv."},{"m":"e","q":"Att ta hänsyn till djurens välmående är en del av:","o":["Djuretik","Skattepolitik","Aktiebolagsrätt","Idrottens regler"],"a":0,"w":"Djuretik handlar om hur vi får och bör behandla djur."},{"m":"e","q":"Vad innebär klimatetik?","o":["Att resonera om vårt ansvar för miljön och kommande generationer","Att studera molnformationer","Att räkna temperatur","Att samla flaskor"],"a":0,"w":"Klimatetik handlar om vårt etiska ansvar för planeten och framtida generationer."},{"m":"e","q":"Vilket är ett exempel på utilitaristiskt tänkande?","o":["Maximera lyckan för flest möjliga","Följa religiösa regler","Vara modig oavsett följder","Lyda kungen"],"a":0,"w":"Utilitarism är en form av konsekvensetik som vill maximera nytta/lycka."},{"m":"e","q":"Att vara konsekvent moraliskt betyder att:","o":["Bara följa egna känslor","Tillämpa samma principer i liknande situationer","Aldrig ändra sig","Lyda majoriteten"],"a":1,"w":"Moralisk konsekvens innebär att man inte gör undantag utan goda skäl."},{"m":"e","q":"Vilket av följande är inte en etisk modell?","o":["Pliktetik","Konsekvensetik","Dygdetik","Algebraetik"],"a":3,"w":"Algebraetik är inte en etisk modell. Pliktetik, konsekvensetik och dygdetik är klassiska modeller."},{"m":"s","q":"Vad innebär sekularisering?","o":["Att religionens roll i samhället minskar eller förändras","Att religion blir den enda lagen","Att alla blir ateister","Att religion blir förbjuden"],"a":0,"w":"Sekularisering beskriver hur religionen ofta får mindre samhällelig makt och betydelse, även om människor fortfarande kan vara religiösa."},{"m":"s","q":"När separerades Svenska kyrkan och svenska staten formellt?","o":["1809","1900","2000","2020"],"a":2,"w":"Svenska kyrkan skildes från staten år 2000."},{"m":"s","q":"Vad innebär religionsfrihet i Sverige?","o":["Bara att tro privat","Rätt att tro, byta religion, lämna religion och utöva religion inom lagens ramar","Att enbart majoritetens religion gäller","Att kritik mot religion är förbjuden"],"a":1,"w":"Religionsfriheten gäller både frihet till och frihet från religion, men måste samspela med andra lagar."},{"m":"s","q":"Vilket land brukar nämnas som mycket sekulariserat?","o":["Sverige","Saudiarabien","Indien","Iran"],"a":0,"w":"Sverige räknas som ett av världens mest sekulariserade länder."},{"m":"s","q":"Vad är en konfessionsfri skola?","o":["En skola utan religiös undervisning","En skola där bara en religion lärs ut","En skola där alla måste be","En privatskola"],"a":0,"w":"Den svenska skolan ska vara konfessionsfri – undervisningen får inte ha religiös prägel."},{"m":"s","q":"Vad menas med religiös pluralism?","o":["Att flera religioner finns sida vid sida i ett samhälle","Att alla har samma religion","Att alla saknar religion","Att religion förbjuds"],"a":0,"w":"Religiös pluralism innebär att olika religioner och livsåskådningar finns och samverkar i samhället."},{"m":"s","q":"Vad är en livsåskådning?","o":["En genomtänkt syn på tillvaron som kan vara religiös eller icke-religiös","En matkultur","En sportstil","En klädstil"],"a":0,"w":"Livsåskådning handlar om grundläggande syn på liv, värderingar och världen."},{"m":"s","q":"Vilket är ett exempel på sekulär livsåskådning?","o":["Humanism","Hinduism","Islam","Judendom"],"a":0,"w":"Sekulär humanism är en livsåskådning utan tro på gudar som betonar mänskliga värden."},{"m":"s","q":"Vad menas med statskyrka?","o":["En kyrka som är formellt knuten till staten","En kyrka utan ledning","En kyrka för bara barn","En kyrka utan medlemmar"],"a":0,"w":"I en statskyrka är staten och kyrkan formellt sammanvävda. Sverige hade statskyrka fram till år 2000."},{"m":"s","q":"Vilket är ett kännetecken för ett demokratiskt samhälle med religionsfrihet?","o":["Människor kan ha olika tro och uttrycka den inom lagens ramar","Alla måste tillhöra en religion","Religion förbjuds helt","Bara präster har rättigheter"],"a":0,"w":"I en demokrati med religionsfrihet kan människor tro olika och uttrycka sin tro inom lagen."},{"m":"s","q":"Vad menas med diskriminering på religiös grund?","o":["Att en person missgynnas på grund av sin religion eller trosuppfattning","Att alla får samma rättigheter","Att religion får statsstöd","Att man byter religion"],"a":0,"w":"Religiös diskriminering är förbjuden enligt diskrimineringslagen i Sverige."},{"m":"s","q":"Vad är ett trossamfund?","o":["En sammanslutning för religiös verksamhet","En politisk parti","Ett företag","En idrottsförening"],"a":0,"w":"Trossamfund är organisationer för religiös verksamhet och kan registreras hos Myndigheten för stöd till trossamfund."},{"m":"s","q":"Vilken roll har religion i många människors identitet idag?","o":["Saknar betydelse","Kan vara en av flera viktiga delar","Är alltid den enda viktiga delen","Är förbjuden att uttrycka"],"a":1,"w":"Religion kan vara en del av identiteten tillsammans med t.ex. familj, kultur, intressen och nationalitet."},{"m":"s","q":"Vilket är ett exempel på religion i offentligheten?","o":["En diskussion i riksdagen om religiösa friskolor","En matsedel hemma","En film på TV utan religiöst innehåll","Ett mattetal"],"a":0,"w":"Frågor om religiösa friskolor är ett tydligt exempel på hur religion debatteras i det offentliga rummet."},{"m":"s","q":"Vad är religionsdialog?","o":["Ett samtal mellan personer från olika religioner och livsåskådningar","En kyrkokonsert","En privat bön","En politisk valdebatt"],"a":0,"w":"Religionsdialog handlar om att olika trostraditioner möts och samtalar för förståelse."},{"m":"s","q":"Vilket är ett vanligt argument för religiös integration i Sverige?","o":["Det stärker gemenskap och förståelse","Det förbjuder all tro","Det gör alla likadana","Det avskaffar lagen"],"a":0,"w":"Religiös integration handlar om att människor med olika tro kan leva tillsammans i samhället."},{"m":"s","q":"Hur påverkar globaliseringen religion?","o":["Religioner blir mer isolerade","Religiösa idéer, traditioner och människor sprids över världen","Religioner försvinner alltid","Bara en religion blir kvar"],"a":1,"w":"Globaliseringen gör att religiösa idéer och människor möts över gränser och påverkar varandra."},{"m":"s","q":"Vad är en religiös minoritet?","o":["En religiös grupp som är mindre än majoriteten i ett samhälle","En politiskt parti","En sportklubb","En generation"],"a":0,"w":"En religiös minoritet är en grupp som är färre till antalet än majoritetsreligionen i ett samhälle."},{"m":"s","q":"Vad innebär att religion är 'en privatsak'?","o":["Att man inte får tro","Att tro och utövande främst ses som personliga val","Att religion förbjuds offentligt","Att religion ägs av staten"],"a":1,"w":"I sekulariserade samhällen ses religion ofta som ett personligt val snarare än något staten styr."},{"m":"s","q":"Hur kan religion bidra positivt till samhället?","o":["Genom att skapa gemenskap och engagemang i välfärdsfrågor","Genom att bara orsaka konflikt","Genom att förbjuda demokrati","Genom att göra alla lika"],"a":0,"w":"Religiösa samfund kan bidra med gemenskap, hjälp till utsatta och engagemang i sociala frågor."},{"m":"k","q":"Vilket av dessa är en källkritisk fråga?","o":["Hur ser molnen ut?","Vem är avsändaren och vad är syftet?","Vad är klockan?","Vad heter floden?"],"a":1,"w":"Källkritik börjar i frågor om avsändare, syfte, tendens, beroende och aktualitet."},{"m":"k","q":"Vad menas med tendens i källkritik?","o":["Att källan är gammal","Att källan vill påverka i en viss riktning","Att källan är kort","Att källan är på svenska"],"a":1,"w":"En källa har tendens om den är vinklad eller vill övertyga om en viss åsikt."},{"m":"k","q":"Vad innebär aktualitet i källkritik?","o":["Hur dyr källan är","Hur ny eller relevant källan är i tiden","Hur lång källan är","Hur många bilder den har"],"a":1,"w":"Aktualitet handlar om när källan kom till och om informationen fortfarande är relevant."},{"m":"k","q":"Vad är beroende i källkritik?","o":["Att källan kostar pengar","Att källan bygger på en annan källa","Att källan är obligatorisk i skolan","Att källan är digital"],"a":1,"w":"Beroende betyder att källan inte är förstahandsinformation, utan bygger på något annat."},{"m":"k","q":"Vilken källa är ofta mest tillförlitlig om en religiös högtid?","o":["En slumpmässig sociala medier-post","En seriös faktasida eller en forskare i religionsvetenskap","En reklam","En kommentar på en video"],"a":1,"w":"Forskare och seriösa faktasidor ger ofta mer tillförlitlig information än enstaka sociala medier-inlägg."},{"m":"k","q":"Vad är skillnaden mellan en primär- och sekundärkälla?","o":["Primärkällan är förstahandsinformation, sekundärkällan bygger vidare på andra källor","Primärkällan är digital","Sekundärkällan är alltid äldst","Det finns ingen skillnad"],"a":0,"w":"En primärkälla är ursprunglig information, t.ex. ett ögonvittne; en sekundärkälla refererar till primärkällor."},{"m":"k","q":"Att läsa flera olika källor om samma religion är ett exempel på:","o":["Plagiat","Triangulering / jämförelse av källor","Censur","Tendens"],"a":1,"w":"Att jämföra flera källor är ett sätt att kontrollera information och avslöja vinklingar."},{"m":"k","q":"Vad är en stereotyp av en religion ofta tecken på?","o":["Brist på källkritik och förenklingar","God forskning","Mångfald","Religionsfrihet"],"a":0,"w":"Stereotyper är förenklade och generaliserande bilder som ofta går att granska källkritiskt."},{"m":"k","q":"Vilken fråga är minst relevant ur ett källkritiskt perspektiv?","o":["Vem skrev texten?","Vilket syfte har texten?","Vilken färg har webbsidan?","Är källan beroende av en annan?"],"a":2,"w":"Färgen på webbsidan säger normalt sett inget om innehållets trovärdighet."},{"m":"k","q":"Att en TikTok-video om en religion får många likes betyder främst:","o":["Att den är trovärdig","Att den är populär, men inte nödvändigtvis korrekt","Att den är godkänd av forskare","Att den är skolverkets material"],"a":1,"w":"Popularitet är inte samma sak som tillförlitlighet; man måste granska källan ändå."},{"m":"k","q":"Vilket är ett exempel på en bra fråga när man läser om religion på nätet?","o":["'Var det roligt skrivet?'","'Stämmer detta med flera oberoende källor?'","'Hade jag tråkigt?'","'Hur lång var texten?'"],"a":1,"w":"En central källkritisk fråga är om uppgiften kan bekräftas av flera oberoende källor."},{"m":"k","q":"Vad är desinformation?","o":["Felaktig information som sprids medvetet","Faktiska fakta från forskare","Information på flera språk","Lagtexter"],"a":0,"w":"Desinformation är falsk information som sprids avsiktligt för att vilseleda."},{"m":"k","q":"Hur skiljer sig synen på Jesus mellan kristendom och islam?","o":["Båda ser honom som Gud","Inom kristendom är Jesus Guds son och Gud, inom islam är han en stor profet","Han nämns inte alls i islam","Båda ser honom enbart som en lärare"],"a":1,"w":"Inom kristendom är Jesus Guds son; inom islam är Isa (Jesus) en viktig profet men inte Gud."},{"m":"k","q":"Vad har judendom, kristendom och islam gemensamt?","o":["De är monoteistiska","De har samma heliga bok","De firar samma högtider","De har samma profet"],"a":0,"w":"De abrahamitiska religionerna delar tron på en enda Gud men har olika urkunder och högtider."},{"m":"k","q":"Vilken religion betonar att Jesus är frälsaren?","o":["Judendom","Kristendom","Islam","Hinduism"],"a":1,"w":"Inom kristendomen är Jesus frälsaren som ger människor möjlighet att försonas med Gud."},{"m":"k","q":"I vilken religion är meditation och åttafaldiga vägen centrala?","o":["Buddhism","Judendom","Kristendom","Islam"],"a":0,"w":"Buddhismen lyfter den åttafaldiga vägen och meditation som vägar mot uppvaknande."},{"m":"k","q":"Vilken högtid är gemensam för judar och kristna i namnet 'påsk'?","o":["Pesach och kristen påsk är historiskt kopplade","Diwali","Vesak","Eid"],"a":0,"w":"Den kristna påsken är historiskt kopplad till judarnas pesach – Jesus åt enligt traditionen påskmåltid med lärjungarna."},{"m":"k","q":"Vilken religion firar Eid al-fitr?","o":["Hinduism","Judendom","Islam","Kristendom"],"a":2,"w":"Eid al-fitr firas av muslimer efter ramadan."},{"m":"k","q":"Vilken religion firar Diwali?","o":["Hinduism (och även sikher och vissa jainer)","Kristendom","Judendom","Islam"],"a":0,"w":"Diwali är ljusets högtid och firas främst av hinduer, men även av sikher och jainer."},{"m":"k","q":"Vilken högtid kopplas till buddhismen?","o":["Vesak","Pesach","Pingst","Eid"],"a":0,"w":"Vesak är buddhismens viktigaste högtid och firar Buddhas liv."},{"m":"k","q":"Vilken religion firar Hanukka?","o":["Judendom","Islam","Kristendom","Hinduism"],"a":0,"w":"Hanukka är en judisk ljushögtid som firar tempelinvigningen efter en seger över främmande makt."},{"m":"k","q":"Vad har många religioner gemensamt när det gäller ritualer vid födelse?","o":["De saknas","De markerar barnets tillhörighet och välkomnande","De är förbjudna","Endast majoritetsreligionen har dem"],"a":1,"w":"Födelseriter (som dop, namngivning och välkomstritualer) markerar tillhörighet i många religioner."},{"m":"k","q":"Vilken ritual är vanlig vid övergången till vuxenlivet inom judendom?","o":["Bar/bat mitzvah","Konfirmation","Hajj","Bön fem gånger"],"a":0,"w":"Bar mitzvah och bat mitzvah markerar att en ung person blir religiöst myndig."},{"m":"k","q":"Vilken ritual i kristendomen påminner om judendomens tradition att bli en del av gemenskapen?","o":["Dop","Hajj","Salat","Diwali"],"a":0,"w":"Dopet är en initiationsrit inom kristendomen som markerar inträde i den kristna gemenskapen."},{"m":"k","q":"Vad är gemensamt för pilgrimsfärder i flera religioner?","o":["Människor reser till en helig plats","Folk byter religion","Folk avskaffar bön","Det är bara turism"],"a":0,"w":"Pilgrimsfärder finns i många religioner – t.ex. hajj till Mecka, kristna till Santiago de Compostela, hinduer till Ganges."},{"m":"k","q":"Vad har de flesta världsreligioner gemensamt om människans värde?","o":["Att människan har ett särskilt värde och ansvar","Att människan saknar värde","Att bara präster har värde","Att människan är som vilket djur som helst"],"a":0,"w":"De flesta religioner ger människan ett särskilt värde och ansvar, även om motiveringarna skiljer sig åt."},{"m":"k","q":"Vad menas med 'gyllene regeln' i flera religioner?","o":["En ekonomisk regel","En moralisk princip om att behandla andra som man själv vill bli behandlad","En kostregel","En klädregel"],"a":1,"w":"Den gyllene regeln finns i olika former i många religioner och i sekulär etik."},{"m":"k","q":"Vilken religion har sju heliga sakrament i den katolska traditionen?","o":["Romersk-katolska kristendomen","Judendom","Islam","Hinduism"],"a":0,"w":"Den romersk-katolska kyrkan räknar sju sakrament: dop, konfirmation, nattvard, bikt, äktenskap, sjukas smörjelse och prästvigning."},{"m":"k","q":"Vad är böneropet i islam?","o":["Adhan","Shema","Fader vår","Mantra"],"a":0,"w":"Adhan är böneutroparens kallelse till bön i moskén."},{"m":"k","q":"Vilken bön är mycket central inom kristendomen?","o":["Fader vår","Shema","Adhan","Mantra"],"a":0,"w":"Fader vår (Herrens bön) lärdes ut av Jesus och bes av kristna världen över."},{"m":"k","q":"Vad är 'shema' inom judendomen?","o":["En central trosbekännelse: 'Hör Israel...'","En kosherregel","En högtid","Ett tempel"],"a":0,"w":"Shema är en av judendomens viktigaste böner och uttrycker tron på en enda Gud."},{"m":"k","q":"Vilket av följande är ett exempel på religiös symbol?","o":["Davidsstjärna","Trafikljus","Periodiska systemet","Multiplikationstabellen"],"a":0,"w":"Davidsstjärnan är en av judendomens mest kända symboler."},{"m":"s","q":"Hur kan religion bidra till identitet?","o":["Den kan ge sammanhang, värderingar och tillhörighet","Den måste alltid stå emot identitet","Den hindrar identitet","Den ersätter all annan identitet"],"a":0,"w":"Religion kan ge värderingar, ritualer och tillhörighet som påverkar identiteten."},{"m":"s","q":"Hur kan religion bidra till konflikt?","o":["När religiösa skillnader används för att skapa motsättningar mellan grupper","Religion orsakar alltid alla konflikter","Religion kan aldrig kopplas till konflikt","Religion löser sig själv"],"a":0,"w":"Religion kan användas både för att förstärka konflikt och för att skapa fred. Sammanhanget är avgörande."},{"m":"s","q":"Hur kan religion bidra till fred?","o":["Genom dialog, försoning och engagemang för rättvisa","Genom att alla blir lika","Genom att förbjuda samtal","Genom att stänga gränser"],"a":0,"w":"Många religiösa ledare och organisationer arbetar för fredsbyggande, försoning och rättvisa."},{"m":"s","q":"Vilket är ett exempel på religion som drivkraft för fred?","o":["Mahatma Gandhis ickevåldskamp","Krigsförklaringar mellan stater","Konsumtion av lyxvaror","Avskaffande av val"],"a":0,"w":"Gandhi byggde sitt ickevåld på religiösa och etiska idéer från hinduism och andra traditioner."},{"m":"s","q":"Vilket är ett exempel på religion som drivkraft för rättvisa?","o":["Martin Luther Kings medborgarrättsarbete","Att förbjuda val","Att avskaffa skolor","Att straffa minoriteter"],"a":0,"w":"Martin Luther King byggde sin kamp mot rasism på kristen tro och ickevåld."},{"m":"s","q":"Hur kan religion påverka människors syn på familj?","o":["Genom att forma värderingar och ritualer kring familjeliv","Religion saknar koppling till familj","Religion förbjuder familj","Bara staten påverkar familjen"],"a":0,"w":"Religion kan påverka synen på äktenskap, barnuppfostran, könsroller och familjeritualer."},{"m":"s","q":"Vad är en konflikt med religiös dimension oftast resultat av?","o":["Bara religion","Flera faktorer som politik, makt, ekonomi och religion","Bara klimat","Bara språk"],"a":1,"w":"Konflikter har vanligen flera orsaker; religion är ofta en av flera dimensioner."},{"m":"s","q":"Vad menas med radikalisering?","o":["Att en person rör sig mot extrema åsikter och kan bli benägen till våld","Att man byter religion","Att man flyttar utomlands","Att man blir vegetarian"],"a":0,"w":"Radikalisering beskriver en process där en person tar till sig extrema åsikter och ibland accepterar våld."},{"m":"s","q":"Hur kan källkritik motverka extremism?","o":["Genom att hjälpa människor granska propaganda och desinformation","Genom att förbjuda all religion","Genom att censurera nyheter","Genom att förbjuda skolor"],"a":0,"w":"Källkritik gör människor bättre rustade att avslöja vinklad eller falsk information."},{"m":"s","q":"Vad är en interreligiös rörelse?","o":["En rörelse som arbetar mellan olika religioner","En politisk parti","En sportförening","En matkultur"],"a":0,"w":"Interreligiösa rörelser söker dialog och samarbete mellan olika trostraditioner."},{"m":"s","q":"Hur kan religion påverka synen på kön och jämställdhet?","o":["Den kan både stödja och utmana traditionella könsroller beroende på tolkning","Den saknar betydelse","Den måste alltid stödja jämställdhet","Den måste alltid motarbeta jämställdhet"],"a":0,"w":"Religiösa traditioner tolkas olika; de kan både motverka och främja jämställdhet beroende på tolkning och sammanhang."},{"m":"s","q":"Vilket är ett exempel på etiskt engagemang i religiösa samfund?","o":["Hjälp till hemlösa","Att förbjuda all matkultur","Att avskaffa skolan","Att stänga sjukvård"],"a":0,"w":"Många religiösa samfund engagerar sig i hjälparbete och social omsorg."},{"m":"s","q":"Vad är en migrationserfarenhet kopplad till religion?","o":["Att en person tar med och formar sin tro i ett nytt land","Att religion automatiskt försvinner","Att man måste byta religion","Att religion är förbjuden"],"a":0,"w":"När människor flyttar tar de ofta med sin tro och påverkas och påverkar i det nya landet."},{"m":"s","q":"Vad innebär ett pluralistiskt samhälle?","o":["Ett samhälle med flera religioner och livsåskådningar sida vid sida","Ett samhälle med en religion","Ett samhälle utan lagar","Ett samhälle utan medborgare"],"a":0,"w":"Pluralism innebär att flera olika livsåskådningar samexisterar."},{"m":"s","q":"Vilken roll har skolan i ett mångreligiöst samhälle?","o":["Att ge kunskap om olika religioner och livsåskådningar utan att ta ställning","Att lära ut bara en religion","Att förbjuda alla religioner","Att tvinga elever att välja religion"],"a":0,"w":"Skolan ska enligt skollagen ge saklig och allsidig information om olika religioner och livsåskådningar."},{"m":"k","q":"Vad betyder ordet religion ursprungligen ofta?","o":["Att binda samman","Att smaka","Att räkna","Att resa"],"a":0,"w":"Ordet religion härleds ofta från latinets religare, som betyder 'binda samman'."},{"m":"k","q":"Vad är en profet?","o":["En person som anses tala på Guds vägnar","En politiker","En företagsledare","En astronom"],"a":0,"w":"I de abrahamitiska religionerna är profeten en person som förmedlar Guds budskap."},{"m":"k","q":"Vad är en urkund?","o":["En central religiös skrift","En kvitto","En karta","En sångbok"],"a":0,"w":"Urkund är ett ord för en helig grundtext i en religion, t.ex. Bibeln, Koranen, Toran."},{"m":"k","q":"Vad är en ritual?","o":["En upprepad handling med symbolisk eller religiös betydelse","En ekonomisk transaktion","En maträtt","En vetenskaplig metod"],"a":0,"w":"Ritualer är handlingar som upprepas och har en symbolisk innebörd, t.ex. dop, bön, vallfart."},{"m":"k","q":"Vad menas med ortodox?","o":["Renlärig eller traditionsbevarande","Modernist","Utan tro","Konsekvensetisk"],"a":0,"w":"Ordet ortodox betyder 'rätt lära' och används om grupper som följer en traditionell tolkning."},{"m":"k","q":"Vad menas med liberal religiositet?","o":["En öppnare och ofta mer modern tolkning av religion","Att man avskaffar religion","Att man alltid är extrem","Att man är ateist"],"a":0,"w":"Liberal religiositet öppnar för moderna tolkningar och dialog med samhället."},{"m":"k","q":"Vad är fundamentalism?","o":["En tolkning som kraftigt betonar ursprungliga regler eller texter","Modern teologi","Ateism","Källkritik"],"a":0,"w":"Fundamentalism är en strömning som vill återgå till en bokstavlig eller ursprunglig läsning av urkunderna."},{"m":"k","q":"Vad är ekumenik?","o":["Samarbete mellan kristna kyrkor","Samarbete mellan religioner","Källkritik","Politisk debatt"],"a":0,"w":"Ekumenik handlar främst om enhet och samarbete mellan olika kristna kyrkor."},{"m":"k","q":"Vad är teologi?","o":["Läran om Gud och tro","Läran om jord","Läran om språk","Läran om idrott"],"a":0,"w":"Teologi är den vetenskapliga och religiösa reflektionen kring Gud, tro och religiösa texter."},{"m":"k","q":"Vad är sharia?","o":["Den islamiska religiösa lagen","En judisk högtid","En kristen ritual","En hinduisk filosofi"],"a":0,"w":"Sharia är islams religiösa lag och tolkas på olika sätt i olika riktningar och länder."},{"m":"k","q":"Vad är halacha?","o":["Den judiska religiösa lagen","Islamisk vallfärd","Kristen bön","Buddhistisk meditation"],"a":0,"w":"Halacha är ett samlingsbegrepp för judendomens religiösa lagar och regler."},{"m":"k","q":"Vad är ett dogm?","o":["En lärosats som anses sann","En kost","En klädsel","En högtid"],"a":0,"w":"Ett dogm är en grundläggande lärosats inom en religion eller tradition."},{"m":"k","q":"Vad menas med mission?","o":["Att sprida sin tro till andra","Att avskaffa tro","Att förbjuda tro","Att kritisera tro"],"a":0,"w":"Mission innebär att sprida sin religion, ofta med målet att vinna nya anhängare."},{"m":"k","q":"Vad är ett kloster?","o":["En plats där munkar eller nunnor lever religiöst","En affärsplats","En fotbollsarena","En myndighet"],"a":0,"w":"Klostret är en plats för religiöst liv, t.ex. inom kristendom och buddhism."},{"m":"k","q":"Vad är synd inom kristendomen?","o":["Handlingar eller tillstånd som skiljer människan från Gud","En typ av mat","En högtid","En ledare"],"a":0,"w":"Synd är ett centralt begrepp i kristendomen och beskrivs ofta som det som skiljer människan från Gud."},{"m":"s","q":"Vilken kristen tradition har dominerat Sveriges historia?","o":["Evangelisk-luthersk","Romersk-katolsk","Ortodox","Pingströrelsen"],"a":0,"w":"Sedan reformationen har den evangelisk-lutherska kyrkan varit dominerande i Sverige."},{"m":"s","q":"Vilka tillhör de fem nationella minoriteterna i Sverige?","o":["Judar, romer, samer, sverigefinnar, tornedalingar","Tyskar, fransmän, italienare, polacker, danskar","Buddhister, ateister, hinduer, sikher, muslimer","Vikingar, lutheraner, romare, greker, etrusker"],"a":0,"w":"Sveriges fem erkända nationella minoriteter är judar, romer, samer, sverigefinnar och tornedalingar."},{"m":"s","q":"Vad reglerar diskrimineringslagen?","o":["Förbud mot diskriminering bland annat på grund av religion","Skattenivåer","Skoluniformer","Idrottstränings tider"],"a":0,"w":"Diskrimineringslagen förbjuder diskriminering på flera grunder, däribland religion eller annan trosuppfattning."},{"m":"s","q":"Hur ser FN:s allmänna förklaring om de mänskliga rättigheterna på religion?","o":["Den slår fast rätten till tankefrihet, samvetsfrihet och religionsfrihet","Den förbjuder religion","Den nämner inte religion","Den kräver att alla blir religiösa"],"a":0,"w":"Artikel 18 i FN:s deklaration slår fast tankefrihet, samvetsfrihet och religionsfrihet."},{"m":"s","q":"Vad menas med religiös friskola i Sverige?","o":["En skola med konfessionell inriktning, men som följer skollagen","En skola där bara en religion får läsas av eleven","En skola utan läroplan","En kyrka utan elever"],"a":0,"w":"Religiösa friskolor får ha konfessionella inslag utanför undervisningen, men undervisningen ska vara icke-konfessionell."},{"m":"s","q":"Vilket århundrade reformerades Sverige från katolicism till lutherdom?","o":["1500-talet","1700-talet","1900-talet","2000-talet"],"a":0,"w":"Reformationen i Sverige drevs igenom av Gustav Vasa under 1500-talet."},{"m":"s","q":"Vad är samernas traditionella religion ofta beskriven som?","o":["En naturreligion med schamanistiska drag","En abrahamitisk religion","En östasiatisk religion","En sekulär livsåskådning"],"a":0,"w":"Samernas traditionella religion har drag av naturreligion och schamanism, även om många samer idag är kristna."},{"m":"s","q":"Vad innebär det att Sverige har skiljt på stat och kyrka?","o":["Svenska kyrkan är inte längre en del av staten utan ett eget trossamfund","Religion är förbjuden","Bara en religion får finnas","Alla måste vara medlemmar"],"a":0,"w":"Sedan 2000 är Svenska kyrkan ett självständigt trossamfund."},{"m":"s","q":"Vad är Skolverkets ansvar i religionskunskap?","o":["Att ange centralt innehåll och kunskapskrav i läroplanen","Att leda gudstjänster","Att bygga kyrkor","Att finansiera trossamfund"],"a":0,"w":"Skolverket ansvarar för läroplaner och kunskapskrav i alla skolämnen, inklusive religionskunskap."},{"m":"s","q":"Vilken plats spelar humanism inom svensk skola?","o":["Den ses som en sekulär livsåskådning som lärs ut som en av flera","Den är förbjuden","Den är skolans religion","Den kräver medlemskap"],"a":0,"w":"Humanism är en sekulär livsåskådning som ingår bland de livsåskådningar som behandlas i religionskunskap."},{"m":"s","q":"Hur kan religion synas i den svenska kalendern?","o":["Helgdagar som påsk, jul och pingst har kristen bakgrund","Inga helgdagar har religiösa rötter","Bara muslimska högtider syns","Bara judiska högtider syns"],"a":0,"w":"Många svenska helgdagar har sina rötter i kristen tradition."},{"m":"s","q":"Vad innebär konfessionsneutral undervisning?","o":["Undervisning som inte tar parti för en viss religion","Undervisning där eleverna tvingas tro","Undervisning utan ämneskunskap","Religiös vigsel i klassrummet"],"a":0,"w":"Konfessionsneutral undervisning ger kunskap om olika religioner och livsåskådningar utan att förkunna någon av dem."},{"m":"v","q":"Vilken urkund hör till buddhismen?","o":["Tripitaka","Tanakh","Koranen","Vedaskrifterna"],"a":0,"w":"Tripitaka ('tre korgar') är en samling tidiga buddhistiska skrifter."},{"m":"v","q":"Vilken urkund hör till hinduismen?","o":["Vedaskrifterna","Bibeln","Koranen","Tanakh"],"a":0,"w":"Vedaskrifterna är hinduismens äldsta skrifter; även Bhagavad-Gita är central."},{"m":"v","q":"Vilken text är central i sikhismen?","o":["Guru Granth Sahib","Tripitaka","Tanakh","Bhagavad-Gita"],"a":0,"w":"Guru Granth Sahib är sikhismens heliga skrift och betraktas som en levande guru."},{"m":"v","q":"Vem grundade sikhismen?","o":["Guru Nanak","Buddha","Muhammed","Konfucius"],"a":0,"w":"Guru Nanak grundade sikhismen i Punjab på 1400-talet."},{"m":"v","q":"Vilken religion grundades av Lao Zi (Laotse)?","o":["Daoismen","Buddhismen","Shintoismen","Sikhismen"],"a":0,"w":"Daoismen tillskrivs Lao Zi och bygger på begreppet dao – 'vägen'."},{"m":"v","q":"Vad är Bhagavad-Gita?","o":["En central hinduisk text om plikt och andlig insikt","En kristen evangeliebok","En buddhistisk regel","En judisk skrift"],"a":0,"w":"Bhagavad-Gita är en del av eposet Mahabharata och en mycket inflytelserik hinduisk text."},{"m":"v","q":"Vad är Hadith inom islam?","o":["Berättelser om Muhammeds liv och uttalanden","Den heliga lagen","Vallfärden till Mecka","Böneropet"],"a":0,"w":"Hadith samlar berättelser om Muhammeds liv och uttalanden, näst Koranen i auktoritet."},{"m":"v","q":"Vilken plats anses helig av judar, kristna och muslimer?","o":["Jerusalem","Stockholm","Tokyo","Reykjavik"],"a":0,"w":"Jerusalem är helig för judar, kristna och muslimer av olika historiska och religiösa skäl."}];
 var BADGES=[
-{title:"Startklar",desc:"Svara på 1 fråga",cond:function(s){return s.answered>=1}},
-{title:"Streakbyggare",desc:"Få 3 rätt i rad",cond:function(s){return s.bestStreak>=3}},
-{title:"Begreppskoll",desc:"Nå nivå 2",cond:function(s){return s.level>=2}},
-{title:"Provsprintare",desc:"Svara på 10 frågor",cond:function(s){return s.answered>=10}},
-{title:"Analytiker",desc:"Skriv och checka en mini-essä",cond:function(s){return s.essayChecks>=1}}
+  {id:"start",title:"Startklar",desc:"Svara på 1 fråga",cond:function(s){return s.answered>=1}},
+  {id:"streak3",title:"Streakbyggare",desc:"Få 3 rätt i rad",cond:function(s){return s.bestStreak>=3}},
+  {id:"streak5",title:"Heta strecket",desc:"Få 5 rätt i rad",cond:function(s){return s.bestStreak>=5}},
+  {id:"streak10",title:"Provformsmästare",desc:"Få 10 rätt i rad",cond:function(s){return s.bestStreak>=10}},
+  {id:"ten",title:"Tio i topp",desc:"Svara rätt på 10 frågor",cond:function(s){return s.correct>=10}},
+  {id:"fifty",title:"Halvvägs",desc:"Svara rätt på 50 frågor",cond:function(s){return s.correct>=50}},
+  {id:"hundred",title:"Centurion",desc:"Svara rätt på 100 frågor",cond:function(s){return s.correct>=100}},
+  {id:"score500",title:"500 poäng",desc:"Nå 500 poäng",cond:function(s){return s.score>=500}},
+  {id:"score1500",title:"1500 poäng",desc:"Nå 1500 poäng",cond:function(s){return s.score>=1500}},
+  {id:"all",title:"Alla 200",desc:"Gå igenom alla 200 frågor",cond:function(s){return s.answered>=200}},
+  {id:"perfect",title:"Felfri",desc:"Klara hela rundan utan fel",cond:function(s){return s.answered>=200&&s.correct===s.answered}}
 ];
-var state={mode:"religioner",current:null,answered:0,correct:0,streak:0,bestStreak:0,xp:0,level:1,essayChecks:0,seen:{},locked:false};
+var CHEERS=["Snyggt!","Bra jobbat!","Du brinner!","Provform!","Ge mig en till!","På topp!","Världsklass!","Religionsproffs!"];
+
+var state={mode:"all",order:[],idx:0,current:null,answered:0,correct:0,streak:0,bestStreak:0,score:0,locked:false,unlocked:{},finished:false};
 
 function el(id){return document.getElementById(id)}
 function setText(id,v){var n=el(id);if(n)n.textContent=String(v)}
 function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;")}
 var toastTimer=null;
-function toast(m){var b=el("toast");if(!b)return;b.textContent=m;b.classList.add("show");if(toastTimer)clearTimeout(toastTimer);toastTimer=setTimeout(function(){b.classList.remove("show")},2400)}
-function levelFromXp(xp){return Math.max(1,Math.floor(xp/120)+1)}
-function nextLevelXp(lv){return lv*120}
+function toast(m){var b=el("toast");if(!b)return;b.textContent=m;b.classList.add("show");if(toastTimer)clearTimeout(toastTimer);toastTimer=setTimeout(function(){b.classList.remove("show")},2200)}
 
-function updateStats(){
-  state.level=levelFromXp(state.xp);
-  setText("level",state.level);
-  setText("xp",state.xp);
-  setText("score",state.correct);
-  setText("streak",state.streak);
-  setText("answered",state.answered);
-  var acc=state.answered===0?0:Math.round(100*state.correct/state.answered);
-  setText("accuracy",acc+"%");
-  var th=nextLevelXp(state.level),prev=state.level>1?nextLevelXp(state.level-1):0;
-  var span=th-prev,prog=Math.min(100,Math.max(0,(state.xp-prev)/span*100));
-  var m=el("xp-meter");if(m)m.style.width=prog+"%";
-  setText("xp-next",Math.max(0,th-state.xp));
-  renderBadges();renderMissions();
+function shuffle(arr){
+  var a=arr.slice();
+  for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}
+  return a;
 }
 
-function pool(){if(state.mode==="mix")return QUESTIONS;return QUESTIONS.filter(function(q){return q.mode===state.mode})}
-function pick(){var p=pool(),avail=p.filter(function(q){return !state.seen[q.q]});if(avail.length===0){state.seen={};avail=p}var q=avail[Math.floor(Math.random()*avail.length)];state.seen[q.q]=1;return q}
+function buildOrder(){
+  var pool=state.mode==="all"?QUESTIONS.slice():QUESTIONS.filter(function(q){return q.m===state.mode});
+  state.order=shuffle(pool);
+  state.idx=0;
+  setText("qtotal",state.order.length);
+}
+
+function resetRun(keepBadges){
+  state.answered=0;state.correct=0;state.streak=0;state.bestStreak=0;state.score=0;state.locked=false;state.finished=false;
+  if(!keepBadges)state.unlocked={};
+  buildOrder();
+  el("summary").classList.remove("show");
+  el("question-card").style.display="";
+  renderQuestion();updateStats();
+}
 
 function renderQuestion(){
-  state.current=pick();state.locked=false;
+  if(state.idx>=state.order.length){return finish()}
+  state.current=state.order[state.idx];
+  state.locked=false;
   var q=state.current;
   setText("mode-label",MODES[state.mode]);
-  setText("quest-title",state.mode!=="mix"?"Dagens expedition":"Prov-sprint");
+  setText("quest-cat",MODES[q.m]);
   setText("question-text",q.q);
+  setText("qnum",state.idx+1);
+  setText("streak2",state.streak);
   var fb=el("feedback");if(fb)fb.classList.remove("show");
   var nb=el("next-question");if(nb)nb.disabled=true;
   var ans=el("answers");if(!ans)return;
   ans.innerHTML="";
-  q.options.forEach(function(opt,i){
+  q.o.forEach(function(opt,i){
     var btn=document.createElement("button");
     btn.type="button";btn.className="ans";
     btn.setAttribute("data-index",String(i));
@@ -261,98 +228,129 @@ function renderQuestion(){
     btn.addEventListener("click",function(){answer(i)});
     ans.appendChild(btn);
   });
+  var prog=Math.min(100,Math.round(100*state.idx/state.order.length));
+  var p=el("progress");if(p)p.style.width=prog+"%";
+}
+
+function spark(card){
+  var box=el("confetti");if(!box)return;
+  for(var i=0;i<14;i++){
+    var s=document.createElement("span");
+    s.className="spark";
+    var hue=Math.floor(Math.random()*360);
+    s.style.background="hsl("+hue+",80%,55%)";
+    var cx=Math.random()*100;
+    s.style.left=cx+"%";
+    s.style.top="50%";
+    var dx=(Math.random()*200-100)+"px";
+    var dy=(Math.random()*-180-20)+"px";
+    s.style.setProperty("--dx",dx);
+    s.style.setProperty("--dy",dy);
+    box.appendChild(s);
+    (function(node){setTimeout(function(){if(node.parentNode)node.parentNode.removeChild(node)},950)})(s);
+  }
+  card.classList.add("celebrate");
+  setTimeout(function(){card.classList.remove("celebrate")},520);
 }
 
 function answer(idx){
   if(state.locked)return;state.locked=true;
-  var q=state.current,correct=idx===q.answer;
+  var q=state.current,correct=idx===q.a;
   state.answered+=1;
   var btns=el("answers").querySelectorAll(".ans");
   for(var i=0;i<btns.length;i++){
     btns[i].disabled=true;
-    if(i===q.answer)btns[i].classList.add("correct");
+    if(i===q.a)btns[i].classList.add("correct");
     else if(i===idx)btns[i].classList.add("wrong");
   }
   var gained=0;
   if(correct){
     state.correct+=1;state.streak+=1;
     state.bestStreak=Math.max(state.bestStreak,state.streak);
-    gained=state.mode==="mix"?18:14;
-    if(state.streak>=3)gained+=6;
-    var oldLv=state.level;state.xp+=gained;
-    setText("feedback-title","Rätt! +"+gained+" XP");
-    setText("feedback-text",q.why);
-    var nlv=levelFromXp(state.xp);
-    if(nlv>oldLv)toast("Nivå upp! Du är nu nivå "+nlv+".");
-    else if(state.streak===3)toast("Streak x3: du börjar bygga provform.");
+    gained=10;
+    if(state.streak>=3)gained+=5;
+    if(state.streak>=5)gained+=10;
+    if(state.streak>=10)gained+=25;
+    state.score+=gained;
+    var cheer=CHEERS[Math.floor(Math.random()*CHEERS.length)];
+    setText("feedback-title",cheer+" Rätt! +"+gained+" poäng");
+    setText("feedback-text",q.w);
+    spark(el("question-card"));
+    if(state.streak===3)toast("🔥 Streak x3! Du börjar bygga provform.");
+    else if(state.streak===5)toast("🔥🔥 Streak x5! Bonus aktiverad.");
+    else if(state.streak===10)toast("🚀 Streak x10! Du brinner.");
+    else if(state.streak>=2)toast(cheer+" +"+gained+" poäng");
   }else{
-    state.streak=0;state.xp+=3;
-    setText("feedback-title","Inte riktigt, men +3 XP för träning");
-    setText("feedback-text",q.why);
+    state.streak=0;
+    setText("feedback-title","Inte riktigt – men du lär dig av det");
+    setText("feedback-text",q.w);
   }
   el("feedback").classList.add("show");
   el("next-question").disabled=false;
+  setText("streak2",state.streak);
   updateStats();
+  state.idx+=1;
+  checkBadges();
 }
 
-function showKey(){if(!state.current)return;setText("feedback-title","Resonemangsnyckel");setText("feedback-text",state.current.key);el("feedback").classList.add("show")}
+function checkBadges(){
+  BADGES.forEach(function(b){
+    if(!state.unlocked[b.id]&&b.cond(state)){
+      state.unlocked[b.id]=true;
+      toast("🏅 Märke upplåst: "+b.title);
+    }
+  });
+  renderBadges();
+}
 
-function setMode(m){state.mode=m;var grid=el("mode-grid");grid.querySelectorAll(".modecard").forEach(function(b){b.setAttribute("aria-pressed",b.getAttribute("data-mode")===m?"true":"false")});renderQuestion();toast("Uppdrag valt: "+MODES[m])}
+function updateStats(){
+  setText("score",state.score);
+  setText("correct",state.correct);
+  setText("streak",state.streak);
+  setText("best",state.bestStreak);
+  setText("answered",state.answered);
+  var acc=state.answered===0?0:Math.round(100*state.correct/state.answered);
+  setText("accuracy",acc+"%");
+  var prog=Math.min(100,Math.round(100*state.idx/Math.max(1,state.order.length)));
+  var p=el("progress");if(p)p.style.width=prog+"%";
+}
 
 function renderBadges(){
   var box=el("badges");if(!box)return;box.innerHTML="";
   BADGES.forEach(function(b){
-    var unlocked=b.cond(state);
+    var unlocked=!!state.unlocked[b.id];
     var li=document.createElement("li");
     li.innerHTML='<span>'+(unlocked?"✓":"·")+'</span><span><strong>'+esc(b.title)+(unlocked?'<span class="tag">UPPLÅST</span>':'')+'</strong><br><span class="t">'+esc(b.desc)+'</span></span>';
     box.appendChild(li);
   });
 }
 
-function renderMissions(){
-  var ms=[
-    {text:"Svara på fem frågor",done:state.answered>=5},
-    {text:"Få tre rätt i rad",done:state.bestStreak>=3},
-    {text:"Checka en mini-essä",done:state.essayChecks>=1}
-  ];
-  var box=el("missions");if(!box)return;box.innerHTML="";
-  ms.forEach(function(m){
-    var li=document.createElement("li");
-    li.innerHTML='<input type="checkbox" '+(m.done?"checked":"")+' disabled aria-label="'+esc(m.text)+'"><span><strong>'+esc(m.text)+'</strong><br><span class="t">'+(m.done?"Avklarad":"Pågår")+'</span></span>';
-    box.appendChild(li);
-  });
+function finish(){
+  state.finished=true;
+  el("question-card").style.display="none";
+  setText("sum-score",state.correct);
+  setText("sum-total",state.answered);
+  setText("sum-acc",(state.answered===0?0:Math.round(100*state.correct/state.answered))+"%");
+  setText("sum-best",state.bestStreak);
+  setText("sum-points",state.score);
+  el("summary").classList.add("show");
+  toast("🎉 Klart! Bra jobbat – allt 200 är gjort.");
+  checkBadges();
 }
 
-function essayCheck(){
-  var t=(el("essay-answer").value||"").trim().toLowerCase();
-  var words=t.length===0?[]:t.split(/\s+/);
-  var checks=[];
-  if(words.length>=55)checks.push("Du har tillräcklig längd för ett utvecklat resonemang.");
-  else checks.push("Utveckla svaret: sikta på minst 55 ord (du har "+words.length+").");
-  function has(arr){for(var i=0;i<arr.length;i++)if(t.indexOf(arr[i])!==-1)return true;return false}
-  if(has(["exempel","till exempel","exempelvis"]))checks.push("Du använder exempel, vilket stärker svaret.");
-  else checks.push("Lägg till minst ett konkret exempel.");
-  if(has(["därför","eftersom","leder till","påverkar","konsekvens"]))checks.push("Du förklarar samband, inte bara påstår.");
-  else checks.push("Förklara orsak och konsekvens med ord som eftersom eller leder till.");
-  if(has(["å ena sidan","å andra sidan","samtidigt","dock","men "]))checks.push("Du nyanserar med flera perspektiv.");
-  else checks.push("Nyansera: visa minst två sidor eller perspektiv.");
-  if(has(["religion","etik","sekularisering","ritual","identitet","livsfråga","pliktetik","konsekvensetik","dygdetik"]))checks.push("Du använder ämnesbegrepp.");
-  else checks.push("Använd minst ett religionskunskapsbegrepp.");
-  var box=el("essay-feedback");box.innerHTML="";
-  checks.forEach(function(c){var li=document.createElement("li");li.textContent=c;box.appendChild(li)});
-  state.essayChecks+=1;
-  if(state.essayChecks===1){state.xp+=20;toast("Mini-essä checkad: +20 XP.")}
-  updateStats();
+function setMode(m){
+  state.mode=m;
+  var grid=el("mode-grid");
+  grid.querySelectorAll(".modecard").forEach(function(b){b.setAttribute("aria-pressed",b.getAttribute("data-mode")===m?"true":"false")});
+  resetRun(true);
+  toast("Kategori vald: "+MODES[m]);
 }
-
-function newEssay(){setText("essay-prompt",ESSAYS[Math.floor(Math.random()*ESSAYS.length)]);el("essay-feedback").innerHTML="";el("essay-answer").value=""}
 
 function bind(){
-  el("new-question").addEventListener("click",renderQuestion);
-  el("next-question").addEventListener("click",renderQuestion);
-  el("explain-more").addEventListener("click",showKey);
-  el("essay-check").addEventListener("click",essayCheck);
-  el("essay-new").addEventListener("click",newEssay);
+  el("next-question").addEventListener("click",function(){renderQuestion();updateStats()});
+  el("shuffle").addEventListener("click",function(){buildOrder();renderQuestion();updateStats();toast("Frågorna är blandade.")});
+  el("restart").addEventListener("click",function(){if(confirm("Starta om från första frågan?")){resetRun(true);toast("Omstart klar.")}});
+  el("sum-restart").addEventListener("click",function(){resetRun(true)});
   el("mode-grid").querySelectorAll(".modecard").forEach(function(b){
     var m=b.getAttribute("data-mode");
     b.addEventListener("click",function(){setMode(m)});
@@ -361,12 +359,20 @@ function bind(){
 
 function start(){
   try{
-    bind();renderQuestion();updateStats();
-    setText("status","Snabb quizmotor är redo. Allt körs lokalt – inget skickas iväg.");
+    bind();
+    buildOrder();
+    renderQuestion();
+    renderBadges();
+    updateStats();
+    setText("status","Quizmotor redo. 200 frågor om religion åk 9. Allt körs lokalt – inget skickas iväg.");
   }catch(e){
     var s=el("status");if(s){s.style.background="var(--badbg)";s.style.color="var(--bad)";s.style.borderColor="var(--bad)";s.textContent="Fel vid start: "+(e&&e.message?e.message:e)+". Ladda om sidan."}
   }
 }
+
+// Expose for tests
+window.__RJ_QUESTIONS__=QUESTIONS;
+window.__RJ_BADGES__=BADGES;
 
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start,{once:true});
 else start();
